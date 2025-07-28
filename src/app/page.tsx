@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare, LayoutGrid, PlayCircle, Bookmark, CheckCircle, Clock, BarChart3, FileText, ListVideo, List } from 'lucide-react';
+import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare, LayoutGrid, PlayCircle, Bookmark, CheckCircle, Clock, BarChart3, FileText, ListVideo, List, Coffee } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Tutorial } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
@@ -301,29 +301,36 @@ export default function LandingPage() {
                 </span>
               </Link>
               <p className="text-sm text-muted-foreground">Made by developers, for developers.</p>
-            </div>
-             <div>
-              <h3 className="font-headline font-semibold mb-4">Navigation</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="#categories" className="text-muted-foreground hover:text-foreground">Paths</Link></li>
-                <li><Link href="/saved" className="text-muted-foreground hover:text-foreground">Saved Tutorials</Link></li>
-                <li><Link href="/login" className="text-muted-foreground hover:text-foreground">Login</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-headline font-semibold mb-4">Contact</h3>
-              <div className="flex gap-4">
+               <div className="flex gap-4 pt-2">
                 <Link href="#" className="text-muted-foreground hover:text-foreground"><Github className="w-6 h-6" /></Link>
                 <Link href="#" className="text-muted-foreground hover:text-foreground"><Twitter className="w-6 h-6" /></Link>
                 <Link href="#" className="text-muted-foreground hover:text-foreground"><Youtube className="w-6 h-6" /></Link>
               </div>
             </div>
              <div>
+              <h3 className="font-headline font-semibold mb-4">Navigation</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="#categories" className="text-muted-foreground hover:text-foreground">Paths</Link></li>
+                <li><Link href="/saved" className="text-muted-foreground hover:text-foreground">Saved Tutorials</Link></li>
+                 <li><Link href="/about" className="text-muted-foreground hover:text-foreground">About</Link></li>
+                <li><Link href="/contact" className="text-muted-foreground hover:text-foreground">Contact</Link></li>
+              </ul>
+            </div>
+            <div>
               <h3 className="font-headline font-semibold mb-4">Legal</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground">Privacy Policy</Link></li>
-                <li><Link href="#" className="text-muted-foreground hover:text-foreground">Terms of Service</Link></li>
+                <li><Link href="/terms" className="text-muted-foreground hover:text-foreground">Privacy & Terms</Link></li>
+                <li><Link href="/submit" className="text-muted-foreground hover:text-foreground">Submit a Tutorial</Link></li>
               </ul>
+            </div>
+             <div>
+              <h3 className="font-headline font-semibold mb-4">Support Us</h3>
+              <p className="text-sm text-muted-foreground mb-4">If you find CodeClips useful, consider supporting the project.</p>
+              <Button asChild className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold">
+                  <a href="#" target="_blank" rel="noopener noreferrer">
+                      <Coffee className="mr-2 h-5 w-5"/> Buy Me a Coffee
+                  </a>
+              </Button>
             </div>
           </div>
           <div className="mt-8 border-t pt-6 text-center text-sm text-muted-foreground">
