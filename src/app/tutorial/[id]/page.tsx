@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { Bookmark, Clock, BarChart3, Code, CheckCircle, Info, ArrowLeft, Layers } from 'lucide-react';
+import { Bookmark, Clock, BarChart3, Code, CheckCircle, Info, ArrowLeft, Layers, ListVideo } from 'lucide-react';
 import Link from 'next/link';
 
 export default function TutorialDetailPage() {
@@ -146,6 +146,23 @@ export default function TutorialDetailPage() {
                 </Button>
             </div>
         </div>
+
+        {tutorial.timestamps && tutorial.timestamps.length > 0 && (
+          <div className="md:col-span-2">
+            <h2 className="text-2xl font-headline font-semibold border-b pb-2 mb-4 flex items-center gap-2">
+              <ListVideo className="h-6 w-6" />
+              Timestamps
+            </h2>
+            <ul className="space-y-2">
+              {tutorial.timestamps.map((timestamp, index) => (
+                <li key={index} className="flex gap-4 items-start text-sm">
+                  <span className="font-mono text-muted-foreground w-16 text-right shrink-0">{timestamp.time}</span>
+                  <span className="font-medium">{timestamp.description}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {tutorial.tags.length > 0 && (
             <div className="md:col-span-2">

@@ -10,4 +10,5 @@ export interface Tutorial {
   category: string;
   estimatedTime: string;
   prerequisites: string[];
+  timestamps?: { time: string; description: string }[];
 }
