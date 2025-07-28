@@ -12,16 +12,28 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Clock, BarChart3, Code, ArrowLeft } from 'lucide-react';
+import { Clock, BarChart3, Code, ArrowLeft, Bookmark, CheckCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+
 
 export default function CategoryPage() {
   const params = useParams();
   const category = decodeURIComponent(params.category as string);
+  const { toast } = useToast();
   const [tutorials, setTutorials] = useState<Tutorial[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [savedTutorials, setSavedTutorials] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedIds = JSON.parse(localStorage.getItem('savedTutorials') || '[]');
+      setSavedTutorials(new Set(savedIds));
+    }
+  }, []);
 
   useEffect(() => {
     if (!category) return;
@@ -44,6 +56,25 @@ export default function CategoryPage() {
     };
     fetchTutorials();
   }, [category]);
+
+  const toggleSave = (tutorial: Tutorial) => {
+    const newSavedTutorials = new Set(savedTutorials);
+    if (newSavedTutorials.has(tutorial.id)) {
+      newSavedTutorials.delete(tutorial.id);
+      toast({
+        title: 'Removed from Saved',
+        description: `"${tutorial.title}" has been removed from your saved tutorials.`,
+      });
+    } else {
+      newSavedTutorials.add(tutorial.id);
+      toast({
+        title: 'Saved!',
+        description: `"${tutorial.title}" has been added to your saved tutorials.`,
+      });
+    }
+    setSavedTutorials(newSavedTutorials);
+    localStorage.setItem('savedTutorials', JSON.stringify(Array.from(newSavedTutorials)));
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -82,7 +113,9 @@ export default function CategoryPage() {
         <div className="text-center text-destructive">{error}</div>
       ) : tutorials.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {tutorials.map((tutorial) => (
+          {tutorials.map((tutorial) => {
+            const isSaved = savedTutorials.has(tutorial.id);
+            return (
             <Card key={tutorial.id} className="flex flex-col transition-transform transform hover:-translate-y-1 shadow-md hover:shadow-xl">
               <CardHeader>
                 <Link href={`/tutorial/${tutorial.id}`} className="block">
@@ -108,13 +141,20 @@ export default function CategoryPage() {
                     <div className="flex items-center gap-2 text-muted-foreground"><Clock className="h-4 w-4 text-accent" /><span className="font-medium text-foreground">{tutorial.estimatedTime}</span></div>
                 </div>
               </CardContent>
-              <CardFooter className="flex-wrap gap-2">
-                {tutorial.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="font-normal">{tag}</Badge>
-                ))}
+              <CardFooter className="flex-wrap gap-2 justify-between items-center">
+                 <div className="flex flex-wrap gap-2">
+                    {tutorial.tags.map((tag) => (
+                      <Badge key={tag} variant="secondary" className="font-normal">{tag}</Badge>
+                    ))}
+                 </div>
+                 <Button variant="outline" size="sm" onClick={() => toggleSave(tutorial)}>
+                  {isSaved ? <CheckCircle className="mr-2 h-4 w-4 text-primary" /> : <Bookmark className="mr-2 h-4 w-4" />}
+                  {isSaved ? 'Saved' : 'Save'}
+                </Button>
               </CardFooter>
             </Card>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="text-center py-16 text-muted-foreground">
