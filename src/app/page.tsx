@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube } from 'lucide-react';
+import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare } from 'lucide-react';
 
 const categories = [
   {
@@ -105,12 +105,43 @@ export default function LandingPage() {
         </section>
       </main>
       <footer className="bg-background border-t">
-        <div className="container mx-auto py-6 px-4 md:px-6 flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} CodeClips. All rights reserved.</p>
-          <div className="flex gap-4 mt-4 sm:mt-0">
-            <Link href="#" className="hover:text-foreground"><Github className="w-5 h-5" /></Link>
-            <Link href="#" className="hover:text-foreground"><Twitter className="w-5 h-5" /></Link>
-            <Link href="#" className="hover:text-foreground"><Youtube className="w-5 h-5" /></Link>
+        <div className="container mx-auto py-12 px-4 md:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="space-y-4">
+               <Link href="/" className="flex items-center space-x-2">
+                <PlaySquare className="h-7 w-7 text-primary" />
+                <span className="text-xl font-bold font-headline">
+                  CodeClips
+                </span>
+              </Link>
+              <p className="text-sm text-muted-foreground">Made by developers, for developers.</p>
+            </div>
+             <div>
+              <h3 className="font-headline font-semibold mb-4">Navigation</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="#categories" className="text-muted-foreground hover:text-foreground">Categories</Link></li>
+                <li><Link href="/saved" className="text-muted-foreground hover:text-foreground">Saved Tutorials</Link></li>
+                <li><Link href="/login" className="text-muted-foreground hover:text-foreground">Login</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-headline font-semibold mb-4">Contact</h3>
+              <div className="flex gap-4">
+                <Link href="#" className="text-muted-foreground hover:text-foreground"><Github className="w-6 h-6" /></Link>
+                <Link href="#" className="text-muted-foreground hover:text-foreground"><Twitter className="w-6 h-6" /></Link>
+                <Link href="#" className="text-muted-foreground hover:text-foreground"><Youtube className="w-6 h-6" /></Link>
+              </div>
+            </div>
+             <div>
+              <h3 className="font-headline font-semibold mb-4">Legal</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground">Privacy Policy</Link></li>
+                <li><Link href="#" className="text-muted-foreground hover:text-foreground">Terms of Service</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-8 border-t pt-6 text-center text-sm text-muted-foreground">
+            <p>&copy; {new Date().getFullYear()} CodeClips. All rights reserved.</p>
           </div>
         </div>
       </footer>
