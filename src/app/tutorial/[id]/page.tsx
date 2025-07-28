@@ -167,9 +167,12 @@ export default function TutorialDetailPage() {
         Back to {tutorial.category}
       </Link>
       <header className="mb-6">
-        <div className="flex items-center gap-4 mb-2">
-            <TutorialIcon className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold font-headline tracking-tight">{tutorial.title}</h1>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
+            <div className="flex items-center gap-4 mb-2 sm:mb-0">
+                <TutorialIcon className="h-8 w-8 text-primary" />
+                <h1 className="text-3xl md:text-4xl font-bold font-headline tracking-tight">{tutorial.title}</h1>
+            </div>
+            <Badge variant="outline" className="text-sm capitalize w-fit">{tutorial.type}</Badge>
         </div>
       </header>
 
@@ -228,3 +231,5 @@ export default function TutorialDetailPage() {
     </div>
   );
 }
+
+    
