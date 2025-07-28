@@ -142,7 +142,7 @@ export default function TutorialDetailPage() {
                 </ul>
                 <Button onClick={toggleSave} className="w-full mt-6">
                     {isSaved ? <CheckCircle className="mr-2 h-4 w-4" /> : <Bookmark className="mr-2 h-4 w-4" />}
-                    {isSaved ? 'Saved to Favorites' : 'Save to Favorites'}
+                    {isSaved ? 'Saved for Later' : 'Save for Later'}
                 </Button>
             </div>
         </div>
@@ -157,6 +157,7 @@ export default function TutorialDetailPage() {
               {tutorial.timestamps.map((timestamp, index) => (
                 <li key={index} className="flex gap-4 items-start text-sm">
                   <span className="font-mono text-muted-foreground w-16 text-right shrink-0">{timestamp.time}</span>
+
                   <span className="font-medium">{timestamp.description}</span>
                 </li>
               ))}
