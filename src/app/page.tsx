@@ -139,7 +139,7 @@ export default function LandingPage() {
             <div className="mx-auto w-full max-w-sm space-y-2">
                <Button asChild size="lg">
                 <Link href="#categories">
-                  Browse Categories
+                  Choose your path
                 </Link>
               </Button>
             </div>
