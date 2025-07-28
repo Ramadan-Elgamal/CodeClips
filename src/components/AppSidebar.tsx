@@ -10,10 +10,6 @@ import {
     SidebarMenuItem,
     SidebarMenuButton,
     SidebarGroup,
-    SidebarGroupLabel,
-    SidebarMenuSub,
-    SidebarMenuSubButton,
-    SidebarMenuSubItem,
     SidebarSeparator,
     useSidebar,
 } from '@/components/ui/sidebar';
@@ -23,19 +19,15 @@ import {
     Bookmark, 
     Upload, 
     FileText, 
-    Github, 
-    Contact,
     LogOut, 
     PlaySquare
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Button } from './ui/button';
 
 export function AppSidebar() {
     const pathname = usePathname();
-    const { state } = useSidebar();
     const isActive = (path: string) => pathname === path;
 
     return (
@@ -120,33 +112,6 @@ export function AppSidebar() {
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarGroup>
-                <SidebarSeparator />
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton asChild variant="ghost">
-                            <a href="https://github.com" target="_blank">
-                                <Github />
-                                <span>GitHub</span>
-                            </a>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                     <SidebarMenuItem>
-                        <SidebarMenuButton asChild variant="ghost" isActive={isActive('/terms')}>
-                             <Link href="/terms">
-                                <FileText />
-                                <span>Terms & Privacy</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                     <SidebarMenuItem>
-                        <SidebarMenuButton asChild variant="ghost" isActive={isActive('/contact')}>
-                             <Link href="/contact">
-                                <Contact />
-                                <span>Contact</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
             </SidebarFooter>
         </Sidebar>
     );
