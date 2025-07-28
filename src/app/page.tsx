@@ -1,145 +1,109 @@
 
-'use client';
-
-import { useState, useEffect, useMemo } from 'react';
-import { Tutorial } from '@/lib/types';
 import Link from 'next/link';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Clock, BarChart3, Code } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowRight, Code, Video, BrainCircuit } from 'lucide-react';
 
-export default function HomePage() {
-  const [allTutorials, setAllTutorials] = useState<Tutorial[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const categories = [
+  {
+    name: 'Frontend',
+    description: 'Build beautiful and interactive user interfaces.',
+    href: '/category/Frontend',
+    icon: <Code className="w-8 h-8 text-primary" />,
+  },
+  {
+    name: 'Backend',
+    description: 'Power your applications with robust server-side logic.',
+    href: '/category/Backend',
+    icon: <BrainCircuit className="w-8 h-8 text-primary" />,
+  },
+  {
+    name: 'Full Stack',
+    description: 'Master both frontend and backend development.',
+    href: '/category/Full%20Stack',
+    icon: <Code className="w-8 h-8 text-primary" />,
+  },
+  {
+    name: 'Mobile',
+    description: 'Create amazing apps for iOS and Android.',
+    href: '/category/Mobile',
+    icon: <Video className="w-8 h-8 text-primary" />,
+  },
+];
 
-  useEffect(() => {
-    const fetchTutorials = async () => {
-      try {
-        const response = await fetch('/data.json');
-        if (!response.ok) {
-          throw new Error('Failed to fetch tutorials');
-        }
-        const data: Tutorial[] = await response.json();
-        setAllTutorials(data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchTutorials();
-  }, []);
-
-  const tutorialsByCategory = useMemo(() => {
-    return allTutorials.reduce((acc, tutorial) => {
-      const { category } = tutorial;
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      acc[category].push(tutorial);
-      return acc;
-    }, {} as Record<string, Tutorial[]>);
-  }, [allTutorials]);
-
-  const sortedCategories = useMemo(() => {
-    return Object.keys(tutorialsByCategory).sort();
-  }, [tutorialsByCategory]);
-
+export default function LandingPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <header className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold font-headline tracking-tight">
-          Find Your Next Coding Project
-        </h1>
-        <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-          Browse our curated list of high-quality YouTube tutorials to build amazing applications and level up your skills.
-        </p>
-      </header>
-      
-      {isLoading ? (
-        <div className="space-y-12">
-            {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i}>
-                    <Skeleton className="h-8 w-1/4 mb-6" />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {Array.from({ length: 3 }).map((_, j) => (
-                             <Card key={j} className="overflow-hidden">
-                                <CardHeader>
-                                    <Skeleton className="h-6 w-3/4" />
-                                </CardHeader>
-                                <CardContent>
-                                    <Skeleton className="w-full h-48 mb-4" />
-                                    <Skeleton className="h-4 w-full mb-2" />
-                                    <Skeleton className="h-4 w-2/3" />
-                                </CardContent>
-                                <CardFooter>
-                                    <Skeleton className="h-6 w-1/4" />
-                                </CardFooter>
-                            </Card>
-                        ))}
-                    </div>
-                </div>
-            ))}
-        </div>
-      ) : error ? (
-        <div className="text-center text-destructive">{error}</div>
-      ) : sortedCategories.length > 0 ? (
-        <div className="space-y-16">
-          {sortedCategories.map(category => (
-            <section key={category}>
-              <h2 className="text-3xl font-bold font-headline mb-8 border-b pb-4">{category}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {tutorialsByCategory[category].map((tutorial) => (
-                  <Card key={tutorial.id} className="flex flex-col transition-transform transform hover:-translate-y-1 shadow-md hover:shadow-xl">
-                    <CardHeader>
-                      <Link href={`/tutorial/${tutorial.id}`} className="block">
-                        <CardTitle className="font-headline text-xl leading-tight hover:text-primary transition-colors">{tutorial.title}</CardTitle>
-                      </Link>
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-1">
+        <section className="w-full py-20 md:py-32 lg:py-40 bg-card">
+          <div className="container px-4 md:px-6 text-center">
+            <div className="max-w-3xl mx-auto space-y-4">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl font-headline">
+                Learn to Code by Building Projects
+              </h1>
+              <p className="text-lg text-muted-foreground md:text-xl">
+                CodeClips offers a curated collection of the best project-based coding tutorials on YouTube. Stop getting stuck in tutorial hell and start building your portfolio today.
+              </p>
+            </div>
+            <div className="mt-8">
+              <Button asChild size="lg">
+                <Link href="/tutorials">
+                  Explore All Tutorials
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        <section className="w-full py-16 md:py-24">
+          <div className="container px-4 md:px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl font-headline">
+                Choose Your Path
+              </h2>
+              <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
+                Whether you're just starting out or looking to specialize, we have a category for you.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {categories.map((category) => (
+                <Link key={category.name} href={category.href} className="group">
+                  <Card className="h-full transition-all duration-200 ease-in-out transform hover:scale-105 hover:shadow-xl">
+                    <CardHeader className="flex flex-row items-center gap-4 pb-2">
+                      {category.icon}
+                      <CardTitle className="font-headline text-xl">{category.name}</CardTitle>
                     </CardHeader>
-                    <CardContent className="flex-grow">
-                      <div className="aspect-video mb-4 rounded-md overflow-hidden">
-                        <iframe
-                          className="w-full h-full"
-                          src={`https://www.youtube.com/embed/${tutorial.youtubeId}`}
-                          title={tutorial.title}
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          loading="lazy"
-                        ></iframe>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{tutorial.summary}</p>
-                      <div className="space-y-2 text-sm">
-                          <div className="flex items-center gap-2 text-muted-foreground"><BarChart3 className="h-4 w-4 text-accent" /><span className="font-medium text-foreground">{tutorial.difficulty}</span></div>
-                          <div className="flex items-center gap-2 text-muted-foreground"><Code className="h-4 w-4 text-accent" /><span className="font-medium text-foreground">{tutorial.language}</span></div>
-                          <div className="flex items-center gap-2 text-muted-foreground"><Clock className="h-4 w-4 text-accent" /><span className="font-medium text-foreground">{tutorial.estimatedTime}</span></div>
-                      </div>
+                    <CardContent>
+                      <p className="text-muted-foreground">{category.description}</p>
                     </CardContent>
-                    <CardFooter className="flex-wrap gap-2">
-                      {tutorial.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="font-normal">{tag}</Badge>
-                      ))}
-                    </CardFooter>
                   </Card>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-16 text-muted-foreground">
-          <p className="text-lg font-medium">No tutorials found.</p>
-          <p>We couldn't find any tutorials at the moment.</p>
-        </div>
-      )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        <section className="w-full py-16 md:py-24 bg-card">
+          <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
+            <div className="space-y-3">
+              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight font-headline">
+                Ready to Start Building?
+              </h2>
+              <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                Dive into our collection of tutorials and bring your ideas to life. Your next project is just a click away.
+              </p>
+            </div>
+            <div className="mx-auto w-full max-w-sm space-y-2">
+               <Button asChild size="lg">
+                <Link href="/tutorials">
+                  View All Projects
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
