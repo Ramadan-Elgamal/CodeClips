@@ -26,18 +26,6 @@ export function Header() {
         </div>
 
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
-            <form>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search tutorials..."
-                  className="w-full bg-background pl-8 md:w-[200px] lg:w-[300px]"
-                />
-              </div>
-            </form>
-          </div>
           <nav className="hidden items-center space-x-2 md:flex">
               <Button variant="ghost" asChild>
                 <Link href="/saved">
