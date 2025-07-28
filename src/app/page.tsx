@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare } from 'lucide-react';
+import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare, LayoutGrid, PlayCircle, Bookmark } from 'lucide-react';
 
 const categories = [
   {
@@ -56,7 +56,49 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="categories" className="w-full py-16 md:py-24">
+        <section className="w-full py-16 md:py-24">
+          <div className="container px-4 md:px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl font-headline">
+                How It Works
+              </h2>
+              <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
+                Getting started is simple. Follow these three easy steps to begin your learning journey.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+              <div className="flex flex-col items-center space-y-4">
+                <div className="bg-primary/10 p-4 rounded-full">
+                  <LayoutGrid className="w-10 h-10 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold font-headline">1. Browse Tutorials</h3>
+                <p className="text-muted-foreground">
+                  Explore our curated list of tutorials by category or difficulty level to find the perfect project for you.
+                </p>
+              </div>
+              <div className="flex flex-col items-center space-y-4">
+                <div className="bg-primary/10 p-4 rounded-full">
+                  <PlayCircle className="w-10 h-10 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold font-headline">2. Watch & Follow</h3>
+                <p className="text-muted-foreground">
+                  Watch the video tutorial and follow along directly on our site, with all the details you need in one place.
+                </p>
+              </div>
+              <div className="flex flex-col items-center space-y-4">
+                <div className="bg-primary/10 p-4 rounded-full">
+                  <Bookmark className="w-10 h-10 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold font-headline">3. Save Your Progress</h3>
+                <p className="text-muted-foreground">
+                  Save tutorials for later to build your personal learning library and track the projects you want to tackle.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="categories" className="w-full py-16 md:py-24 bg-card">
           <div className="container px-4 md:px-6">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl font-headline">
@@ -84,7 +126,7 @@ export default function LandingPage() {
           </div>
         </section>
         
-        <section className="w-full py-16 md:py-24 bg-card">
+        <section className="w-full py-16 md:py-24">
           <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight font-headline">
