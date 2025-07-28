@@ -14,13 +14,14 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Clock, BarChart3, Code } from 'lucide-react';
+import { Clock, BarChart3, Code, FileText } from 'lucide-react';
 
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
-    if (tutorial.imageUrl && (tutorial.type === 'video' || tutorial.type === 'playlist')) {
+    if (tutorial.type === 'video' || tutorial.type === 'playlist') {
+        const imageUrl = tutorial.imageUrl || `https://placehold.co/400x225.png`;
         return (
             <Image
-                src={tutorial.imageUrl}
+                src={imageUrl}
                 alt={tutorial.title}
                 width={400}
                 height={225}
@@ -30,7 +31,16 @@ function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
         )
     }
     
-    // Fallback for articles or if no image is provided for video/playlist
+    if (tutorial.type === 'article') {
+        return (
+            <div className="w-full h-full bg-secondary flex flex-col items-center justify-center p-4">
+                <FileText className="h-12 w-12 text-muted-foreground mb-2"/>
+                <span className="text-sm text-muted-foreground">Article</span>
+            </div>
+        )
+    }
+    
+    // Fallback for unknown types
     return (
         <div className="w-full h-full bg-secondary flex flex-col items-center justify-center p-4">
             <span className="text-sm text-muted-foreground capitalize">{tutorial.type}</span>

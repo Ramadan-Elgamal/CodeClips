@@ -38,10 +38,11 @@ const categories = [
 ];
 
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
-    if ((tutorial.type === 'video' || tutorial.type === 'playlist') && tutorial.imageUrl) {
+    if (tutorial.type === 'video' || tutorial.type === 'playlist') {
+        const imageUrl = tutorial.imageUrl || `https://placehold.co/400x225.png`;
         return (
              <Image
-                src={tutorial.imageUrl}
+                src={imageUrl}
                 alt={tutorial.title}
                 width={400}
                 height={225}

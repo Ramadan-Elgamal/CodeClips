@@ -71,31 +71,25 @@ function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
       </div>
     );
   }
-  // Fallback for video/playlist with just an image
-  if (tutorial.imageUrl) {
-    return (
-        <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg relative">
-            <Image
-                src={tutorial.imageUrl}
-                alt={tutorial.title}
-                layout="fill"
-                objectFit="cover"
-                data-ai-hint="article hero image"
-            />
-             <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <a href={tutorial.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-white text-lg bg-black/50 px-4 py-2 rounded-md hover:bg-black/70 transition-colors">
-                    <ExternalLink className="h-5 w-5" />
-                    View Content
-                </a>
-            </div>
-        </div>
-    );
-  }
+  
+  const imageUrl = tutorial.imageUrl || `https://placehold.co/1280x720.png`;
 
   return (
-    <div className="aspect-video w-full mb-8 rounded-lg bg-muted flex items-center justify-center">
-        <p className="text-muted-foreground">Content not available.</p>
-    </div>
+      <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg relative">
+          <Image
+              src={imageUrl}
+              alt={tutorial.title}
+              layout="fill"
+              objectFit="cover"
+              data-ai-hint="article hero image"
+          />
+           <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+              <a href={tutorial.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-white text-lg bg-black/50 px-4 py-2 rounded-md hover:bg-black/70 transition-colors">
+                  <ExternalLink className="h-5 w-5" />
+                  View Content
+              </a>
+          </div>
+      </div>
   );
 }
 
