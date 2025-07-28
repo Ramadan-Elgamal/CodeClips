@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Code, Video, BrainCircuit } from 'lucide-react';
+import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube } from 'lucide-react';
 
 const categories = [
   {
@@ -104,6 +104,16 @@ export default function LandingPage() {
           </div>
         </section>
       </main>
+      <footer className="bg-background border-t">
+        <div className="container mx-auto py-6 px-4 md:px-6 flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground">
+          <p>&copy; {new Date().getFullYear()} CodeClips. All rights reserved.</p>
+          <div className="flex gap-4 mt-4 sm:mt-0">
+            <Link href="#" className="hover:text-foreground"><Github className="w-5 h-5" /></Link>
+            <Link href="#" className="hover:text-foreground"><Twitter className="w-5 h-5" /></Link>
+            <Link href="#" className="hover:text-foreground"><Youtube className="w-5 h-5" /></Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
