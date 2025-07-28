@@ -10,8 +10,22 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { Bookmark, Clock, BarChart3, Code, CheckCircle, Info, ArrowLeft, Layers, ListVideo, ExternalLink, FileText, List } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
+  if (tutorial.imageUrl) {
+    return (
+        <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg relative">
+            <Image
+                src={tutorial.imageUrl}
+                alt={tutorial.title}
+                layout="fill"
+                objectFit="cover"
+                data-ai-hint="article hero image"
+            />
+        </div>
+    );
+  }
   if (tutorial.type === 'video' && tutorial.youtubeId) {
     return (
       <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg">
@@ -231,5 +245,3 @@ export default function TutorialDetailPage() {
     </div>
   );
 }
-
-    
