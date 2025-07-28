@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import { PlaySquare, Bookmark, LayoutGrid } from 'lucide-react';
+import { PlaySquare, Bookmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function Header() {
@@ -17,12 +17,6 @@ export function Header() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <nav className="flex items-center space-x-2">
-            <Button variant="ghost" asChild>
-              <Link href="/tutorials">
-                 <LayoutGrid className="mr-2 h-4 w-4" />
-                All Tutorials
-              </Link>
-            </Button>
             <Button variant="ghost" asChild>
               <Link href="/saved">
                 <Bookmark className="mr-2 h-4 w-4" />

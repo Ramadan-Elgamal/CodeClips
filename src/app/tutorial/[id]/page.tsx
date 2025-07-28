@@ -108,9 +108,9 @@ export default function TutorialDetailPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
-      <Link href="/tutorials" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
+      <Link href={`/category/${encodeURIComponent(tutorial.category)}`} className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
         <ArrowLeft className="h-4 w-4" />
-        Back to tutorials
+        Back to {tutorial.category}
       </Link>
       <header className="mb-6">
         <h1 className="text-4xl font-bold font-headline tracking-tight mb-2">{tutorial.title}</h1>
