@@ -23,8 +23,20 @@ import { Label } from '@/components/ui/label';
 
 const TUTORIALS_PER_PAGE = 6;
 
+function getYouTubeId(url: string): string | null {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
+
+function getPlaylistId(url: string): string | null {
+    const regExp = /[?&]list=([^#&?]+)/;
+    const match = url.match(regExp);
+    return match ? match[1] : null;
+}
+
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
-    if (tutorial.imageUrl) {
+    if ((tutorial.type === 'video' || tutorial.type === 'playlist') && tutorial.imageUrl) {
         return (
             <Image
                 src={tutorial.imageUrl}
@@ -34,32 +46,6 @@ function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
                 className="w-full h-full object-cover"
                 data-ai-hint="project thumbnail"
             />
-        )
-    }
-    if (tutorial.type === 'video' && tutorial.youtubeId) {
-        return (
-            <iframe
-                className="w-full h-full"
-                src={`https://www.youtube.com/embed/${tutorial.youtubeId}`}
-                title={tutorial.title}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                loading="lazy"
-            ></iframe>
-        )
-    }
-    if (tutorial.type === 'playlist' && tutorial.playlistId) {
-        return (
-            <iframe
-                className="w-full h-full"
-                src={`https://www.youtube.com/embed/videoseries?list=${tutorial.playlistId}`}
-                title={tutorial.title}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                loading="lazy"
-            ></iframe>
         )
     }
     if (tutorial.type === 'article') {

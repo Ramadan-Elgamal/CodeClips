@@ -4,6 +4,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Tutorial } from '@/lib/types';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Card,
   CardContent,
@@ -14,6 +15,28 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Clock, BarChart3, Code } from 'lucide-react';
+
+function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
+    if (tutorial.imageUrl && (tutorial.type === 'video' || tutorial.type === 'playlist')) {
+        return (
+            <Image
+                src={tutorial.imageUrl}
+                alt={tutorial.title}
+                width={400}
+                height={225}
+                className="w-full h-full object-cover"
+                data-ai-hint="project thumbnail"
+            />
+        )
+    }
+    
+    // Fallback for articles or if no image is provided for video/playlist
+    return (
+        <div className="w-full h-full bg-secondary flex flex-col items-center justify-center p-4">
+            <span className="text-sm text-muted-foreground capitalize">{tutorial.type}</span>
+        </div>
+    )
+}
 
 export default function AllTutorialsPage() {
   const [allTutorials, setAllTutorials] = useState<Tutorial[]>([]);
@@ -106,15 +129,7 @@ export default function AllTutorialsPage() {
                     </CardHeader>
                     <CardContent className="flex-grow">
                       <div className="aspect-video mb-4 rounded-md overflow-hidden">
-                        <iframe
-                          className="w-full h-full"
-                          src={`https://www.youtube.com/embed/${tutorial.youtubeId}`}
-                          title={tutorial.title}
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          loading="lazy"
-                        ></iframe>
+                        <TutorialContent tutorial={tutorial} />
                       </div>
                       <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{tutorial.summary}</p>
                       <div className="space-y-2 text-sm">
@@ -143,4 +158,3 @@ export default function AllTutorialsPage() {
     </div>
   );
 }
-

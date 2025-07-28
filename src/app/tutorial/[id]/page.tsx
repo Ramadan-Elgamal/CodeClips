@@ -12,7 +12,66 @@ import { Bookmark, Clock, BarChart3, Code, CheckCircle, Info, ArrowLeft, Layers,
 import Link from 'next/link';
 import Image from 'next/image';
 
+function getYouTubeId(url: string): string | null {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
+
+function getPlaylistId(url: string): string | null {
+    const regExp = /[?&]list=([^#&?]+)/;
+    const match = url.match(regExp);
+    return match ? match[1] : null;
+}
+
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
+  const videoId = tutorial.type === 'video' ? getYouTubeId(tutorial.url) : null;
+  const playlistId = tutorial.type === 'playlist' ? getPlaylistId(tutorial.url) : null;
+
+  if (tutorial.type === 'video' && videoId) {
+    return (
+      <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg">
+        <iframe
+          className="w-full h-full"
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+          title={tutorial.title}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+    );
+  }
+  if (tutorial.type === 'playlist' && playlistId) {
+    return (
+      <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg">
+        <iframe
+          className="w-full h-full"
+          src={`https://www.youtube.com/embed/videoseries?list=${playlistId}`}
+          title={tutorial.title}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+    );
+  }
+   if (tutorial.type === 'article') {
+    return (
+        <div className="bg-card p-8 rounded-lg border shadow-lg mb-8 text-center">
+            <FileText className="h-16 w-16 mx-auto text-primary mb-4" />
+            <h2 className="text-2xl font-headline font-semibold mb-2">This is an Article</h2>
+            <p className="text-muted-foreground mb-6">This content is best viewed on its original page.</p>
+            <Button asChild>
+                <a href={tutorial.url} target="_blank" rel="noopener noreferrer">
+                    Read Article
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+            </Button>
+      </div>
+    );
+  }
+  // Fallback for video/playlist with just an image
   if (tutorial.imageUrl) {
     return (
         <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg relative">
@@ -23,52 +82,16 @@ function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
                 objectFit="cover"
                 data-ai-hint="article hero image"
             />
+             <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                <a href={tutorial.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-white text-lg bg-black/50 px-4 py-2 rounded-md hover:bg-black/70 transition-colors">
+                    <ExternalLink className="h-5 w-5" />
+                    View Content
+                </a>
+            </div>
         </div>
     );
   }
-  if (tutorial.type === 'video' && tutorial.youtubeId) {
-    return (
-      <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg">
-        <iframe
-          className="w-full h-full"
-          src={`https://www.youtube.com/embed/${tutorial.youtubeId}?autoplay=1`}
-          title={tutorial.title}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
-    );
-  }
-  if (tutorial.type === 'playlist' && tutorial.playlistId) {
-    return (
-      <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg">
-        <iframe
-          className="w-full h-full"
-          src={`https://www.youtube.com/embed/videoseries?list=${tutorial.playlistId}`}
-          title={tutorial.title}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
-    );
-  }
-  if (tutorial.type === 'article' && tutorial.articleUrl) {
-    return (
-        <div className="bg-card p-8 rounded-lg border shadow-lg mb-8 text-center">
-            <FileText className="h-16 w-16 mx-auto text-primary mb-4" />
-            <h2 className="text-2xl font-headline font-semibold mb-2">This is an Article</h2>
-            <p className="text-muted-foreground mb-6">This content is best viewed on its original page.</p>
-            <Button asChild>
-                <a href={tutorial.articleUrl} target="_blank" rel="noopener noreferrer">
-                    Read Article
-                    <ExternalLink className="ml-2 h-4 w-4" />
-                </a>
-            </Button>
-      </div>
-    );
-  }
+
   return (
     <div className="aspect-video w-full mb-8 rounded-lg bg-muted flex items-center justify-center">
         <p className="text-muted-foreground">Content not available.</p>

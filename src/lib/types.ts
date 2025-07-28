@@ -2,9 +2,7 @@
 export interface Tutorial {
   id: string;
   title: string;
-  youtubeId?: string;
-  playlistId?: string;
-  articleUrl?: string;
+  url: string;
   imageUrl?: string;
   type: 'video' | 'playlist' | 'article';
   summary: string;

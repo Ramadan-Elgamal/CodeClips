@@ -38,7 +38,7 @@ const categories = [
 ];
 
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
-    if (tutorial.imageUrl) {
+    if ((tutorial.type === 'video' || tutorial.type === 'playlist') && tutorial.imageUrl) {
         return (
              <Image
                 src={tutorial.imageUrl}
@@ -47,32 +47,6 @@ function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
                 height={225}
                 className="w-full h-full object-cover"
             />
-        )
-    }
-    if (tutorial.type === 'video' && tutorial.youtubeId) {
-        return (
-            <iframe
-                className="w-full h-full"
-                src={`https://www.youtube.com/embed/${tutorial.youtubeId}`}
-                title={tutorial.title}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                loading="lazy"
-            ></iframe>
-        )
-    }
-    if (tutorial.type === 'playlist' && tutorial.playlistId) {
-        return (
-            <iframe
-                className="w-full h-full"
-                src={`https://www.youtube.com/embed/videoseries?list=${tutorial.playlistId}`}
-                title={tutorial.title}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                loading="lazy"
-            ></iframe>
         )
     }
     if (tutorial.type === 'article') {
