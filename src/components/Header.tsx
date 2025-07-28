@@ -23,6 +23,12 @@ export function Header() {
                 Saved
               </Link>
             </Button>
+            <Button variant="ghost" asChild>
+                <Link href="/login">Login</Link>
+            </Button>
+            <Button asChild>
+                <Link href="/signup">Sign Up</Link>
+            </Button>
           </nav>
         </div>
       </div>
