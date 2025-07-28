@@ -318,7 +318,7 @@ export default function LandingPage() {
              <div>
               <h3 className="font-headline font-semibold mb-4">Navigation</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="#categories" className="text-muted-foreground hover:text-foreground">Categories</Link></li>
+                <li><Link href="#categories" className="text-muted-foreground hover:text-foreground">Paths</Link></li>
                 <li><Link href="/saved" className="text-muted-foreground hover:text-foreground">Saved Tutorials</Link></li>
                 <li><Link href="/login" className="text-muted-foreground hover:text-foreground">Login</Link></li>
               </ul>
@@ -347,5 +347,7 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
