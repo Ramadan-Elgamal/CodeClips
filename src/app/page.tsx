@@ -1,8 +1,13 @@
 
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare, LayoutGrid, PlayCircle, Bookmark, CheckCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare, LayoutGrid, PlayCircle, Bookmark, CheckCircle, Clock, BarChart3, FileText, ListVideo, List } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Tutorial } from '@/lib/types';
+import { Badge } from '@/components/ui/badge';
 
 const categories = [
   {
@@ -30,6 +35,113 @@ const categories = [
     icon: <Video className="w-8 h-8 text-primary" />,
   },
 ];
+
+function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
+    if (tutorial.type === 'video' && tutorial.youtubeId) {
+        return (
+            <iframe
+                className="w-full h-full"
+                src={`https://www.youtube.com/embed/${tutorial.youtubeId}`}
+                title={tutorial.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+            ></iframe>
+        )
+    }
+    if (tutorial.type === 'playlist' && tutorial.playlistId) {
+        return (
+            <iframe
+                className="w-full h-full"
+                src={`https://www.youtube.com/embed/videoseries?list=${tutorial.playlistId}`}
+                title={tutorial.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+            ></iframe>
+        )
+    }
+    if (tutorial.type === 'article') {
+        return (
+            <div className="w-full h-full bg-secondary flex flex-col items-center justify-center p-4">
+                <FileText className="h-12 w-12 text-muted-foreground mb-2"/>
+                <span className="text-sm text-muted-foreground">Article</span>
+            </div>
+        )
+    }
+    return (
+        <div className="w-full h-full bg-secondary flex flex-col items-center justify-center p-4">
+            <span className="text-sm text-muted-foreground">Content</span>
+        </div>
+    )
+}
+
+function FeaturedTutorials() {
+    const [tutorials, setTutorials] = useState<Tutorial[]>([]);
+
+    useEffect(() => {
+        fetch('/data.json')
+            .then(res => res.json())
+            .then((data: Tutorial[]) => {
+                // simple logic to feature a few tutorials
+                const featured = data.filter(t => t.tags.includes('React') || t.tags.includes('Next.js')).slice(0, 3);
+                setTutorials(featured);
+            });
+    }, []);
+
+    if (tutorials.length === 0) return null;
+
+    return (
+        <section id="featured" className="w-full py-16 md:py-24">
+          <div className="container px-4 md:px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl font-headline">
+                Featured Projects
+              </h2>
+              <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
+                Check out some of our top-rated project tutorials to get started.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {tutorials.map((tutorial) => {
+                 const TypeIcon = tutorial.type === 'playlist' ? List : tutorial.type === 'article' ? FileText : ListVideo;
+                 return (
+                  <Card key={tutorial.id} className="flex flex-col transition-transform transform hover:-translate-y-1 shadow-md hover:shadow-xl">
+                    <CardHeader>
+                        <div className="flex justify-between items-start">
+                            <Link href={`/tutorial/${tutorial.id}`} className="block pr-4">
+                                <CardTitle className="font-headline text-xl leading-tight hover:text-primary transition-colors">{tutorial.title}</CardTitle>
+                            </Link>
+                             <div className="flex flex-col items-center">
+                                <TypeIcon className="h-6 w-6 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground capitalize">{tutorial.type}</span>
+                            </div>
+                       </div>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                      <Link href={`/tutorial/${tutorial.id}`} className="block aspect-video mb-4 rounded-md overflow-hidden">
+                        <TutorialContent tutorial={tutorial} />
+                      </Link>
+                      <div className="space-y-2 text-sm">
+                          <div className="flex items-center gap-2 text-muted-foreground"><BarChart3 className="h-4 w-4 text-accent" /><span className="font-medium text-foreground">{tutorial.difficulty}</span></div>
+                          <div className="flex items-center gap-2 text-muted-foreground"><Clock className="h-4 w-4 text-accent" /><span className="font-medium text-foreground">{tutorial.estimatedTime}</span></div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex-wrap gap-2">
+                      {tutorial.tags.map((tag) => (
+                        <Badge key={tag} variant="secondary" className="font-normal">{tag}</Badge>
+                      ))}
+                    </CardFooter>
+                  </Card>
+                 )
+              })}
+            </div>
+          </div>
+        </section>
+    )
+}
 
 export default function LandingPage() {
   return (
@@ -169,6 +281,7 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <FeaturedTutorials />
 
         <section className="w-full py-16 md:py-24 bg-card">
           <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
