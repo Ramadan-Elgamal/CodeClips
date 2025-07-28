@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { Bookmark, Clock, BarChart3, Code, CheckCircle, Info, ArrowLeft } from 'lucide-react';
+import { Bookmark, Clock, BarChart3, Code, CheckCircle, Info, ArrowLeft, Layers } from 'lucide-react';
 import Link from 'next/link';
 
 export default function TutorialDetailPage() {
@@ -114,9 +114,6 @@ export default function TutorialDetailPage() {
       </Link>
       <header className="mb-6">
         <h1 className="text-4xl font-bold font-headline tracking-tight mb-2">{tutorial.title}</h1>
-        <div className="flex flex-wrap gap-2">
-            {tutorial.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
-        </div>
       </header>
 
       <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg">
@@ -150,12 +147,15 @@ export default function TutorialDetailPage() {
             </div>
         </div>
 
-        {tutorial.prerequisites.length > 0 && (
+        {tutorial.tags.length > 0 && (
             <div className="md:col-span-2">
-                <h2 className="text-2xl font-headline font-semibold border-b pb-2 mb-4">Prerequisites</h2>
-                <ul className="space-y-2 list-disc list-inside text-foreground/80">
-                    {tutorial.prerequisites.map(prereq => <li key={prereq}>{prereq}</li>)}
-                </ul>
+                <h2 className="text-2xl font-headline font-semibold border-b pb-2 mb-4 flex items-center gap-2">
+                  <Layers className="h-6 w-6" />
+                  Stack Used
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                    {tutorial.tags.map(tag => <Badge key={tag} variant="secondary" className="text-sm py-1 px-3">{tag}</Badge>)}
+                </div>
             </div>
         )}
       </div>
