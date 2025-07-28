@@ -5,6 +5,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { Tutorial } from '@/lib/types';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Card,
   CardContent,
@@ -23,6 +24,18 @@ import { Label } from '@/components/ui/label';
 const TUTORIALS_PER_PAGE = 6;
 
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
+    if (tutorial.imageUrl) {
+        return (
+            <Image
+                src={tutorial.imageUrl}
+                alt={tutorial.title}
+                width={400}
+                height={225}
+                className="w-full h-full object-cover"
+                data-ai-hint="project thumbnail"
+            />
+        )
+    }
     if (tutorial.type === 'video' && tutorial.youtubeId) {
         return (
             <iframe

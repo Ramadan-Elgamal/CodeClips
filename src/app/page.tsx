@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare, LayoutGrid, PlayCircle, Bookmark, CheckCircle, Clock, BarChart3, FileText, ListVideo, List } from 'lucide-react';
@@ -37,6 +38,17 @@ const categories = [
 ];
 
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
+    if (tutorial.imageUrl) {
+        return (
+             <Image
+                src={tutorial.imageUrl}
+                alt={tutorial.title}
+                width={400}
+                height={225}
+                className="w-full h-full object-cover"
+            />
+        )
+    }
     if (tutorial.type === 'video' && tutorial.youtubeId) {
         return (
             <iframe
@@ -347,7 +359,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
-
-    

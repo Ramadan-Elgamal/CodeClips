@@ -5,6 +5,7 @@ export interface Tutorial {
   youtubeId?: string;
   playlistId?: string;
   articleUrl?: string;
+  imageUrl?: string;
   type: 'video' | 'playlist' | 'article';
   summary: string;
   tags: string[];
