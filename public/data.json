@@ -1,0 +1,99 @@
+
+[
+  {
+    "id": "1",
+    "title": "Build a Full-Stack Trello Clone with Next.js 14",
+    "youtubeId": "p-v2_bO_jYg",
+    "summary": "A comprehensive tutorial on building a feature-rich Trello clone using the latest Next.js features, including server actions, drag-and-drop functionality, and database integration with Supabase.",
+    "tags": ["next.js", "full-stack", "react", "tailwind css", "dnd"],
+    "difficulty": "Advanced",
+    "language": "TypeScript",
+    "category": "Web Development",
+    "estimatedTime": "5 hours",
+    "prerequisites": ["HTML", "CSS", "TypeScript", "React", "Next.js basics"]
+  },
+  {
+    "id": "2",
+    "title": "Create a 3D Portfolio with Three.js",
+    "youtubeId": "0ubAi_w_T-w",
+    "summary": "Learn how to build a stunning interactive 3D portfolio website from scratch using Three.js and GSAP for animations. A great way to showcase your creativity.",
+    "tags": ["three.js", "3d", "gsap", "webgl"],
+    "difficulty": "Intermediate",
+    "language": "JavaScript",
+    "category": "Creative Coding",
+    "estimatedTime": "3 hours",
+    "prerequisites": ["HTML", "CSS", "JavaScript", "Basic trigonometry"]
+  },
+  {
+    "id": "3",
+    "title": "Python for Everybody - Full University Course",
+    "youtubeId": "8DvywoWv6fI",
+    "summary": "A complete university-level course on Python programming, perfect for beginners. Covers all the fundamental concepts from variables to data structures and web scraping.",
+    "tags": ["python", "beginner", "data science", "programming fundamentals"],
+    "difficulty": "Beginner",
+    "language": "Python",
+    "category": "Programming Languages",
+    "estimatedTime": "15 hours",
+    "prerequisites": []
+  },
+  {
+    "id": "4",
+    "title": "Build a Discord Bot with Node.js",
+    "youtubeId": "y_mAeE5Aexs",
+    "summary": "This tutorial walks you through creating a powerful Discord bot using Node.js and the Discord.js library. You'll learn how to handle commands, events, and more.",
+    "tags": ["node.js", "discord", "bot", "backend"],
+    "difficulty": "Beginner",
+    "language": "JavaScript",
+    "category": "Backend Development",
+    "estimatedTime": "2 hours",
+    "prerequisites": ["JavaScript basics", "Node.js installed"]
+  },
+  {
+    "id": "5",
+    "title": "iOS 17 & Swift 5: Complete iOS App Development",
+    "youtubeId": "aP-6sJ-u_PE",
+    "summary": "Dive into iOS app development with Swift 5 and SwiftUI. This course covers everything from the basics to advanced topics like Core Data and ARKit.",
+    "tags": ["ios", "swift", "swiftui", "mobile dev"],
+    "difficulty": "Intermediate",
+    "language": "Swift",
+    "category": "Mobile Development",
+    "estimatedTime": "10 hours",
+    "prerequisites": ["Basic programming concepts"]
+  },
+  {
+    "id": "6",
+    "title": "Data Structures and Algorithms for Beginners",
+    "youtubeId": "RBSGKlAcrp",
+    "summary": "A clear and concise introduction to essential data structures and algorithms using JavaScript. Perfect for interview preparation and strengthening your foundational knowledge.",
+    "tags": ["algorithms", "data structures", "computer science", "interview prep"],
+    "difficulty": "Intermediate",
+    "language": "JavaScript",
+    "category": "Computer Science",
+    "estimatedTime": "4 hours",
+    "prerequisites": ["JavaScript basics"]
+  },
+  {
+    "id": "7",
+    "title": "Figma UI/UX Design Tutorial for Beginners",
+    "youtubeId": "cKZEgtQU_hA",
+    "summary": "Learn the fundamentals of UI/UX design using Figma. This tutorial covers everything from wireframing and prototyping to creating a full design system for a web application.",
+    "tags": ["figma", "ui", "ux", "design"],
+    "difficulty": "Beginner",
+    "language": "N/A",
+    "category": "Design",
+    "estimatedTime": "2.5 hours",
+    "prerequisites": ["A creative mindset"]
+  },
+  {
+    "id": "8",
+    "title": "Flutter Course for Beginners – 37-hour Cross-Platform App Development",
+    "youtubeId": "pTJJsmejUOQ",
+    "summary": "An epic, in-depth course on Flutter app development. Build beautiful, natively compiled applications for mobile, web, and desktop from a single codebase.",
+    "tags": ["flutter", "dart", "mobile dev", "cross-platform"],
+    "difficulty": "Intermediate",
+    "language": "Dart",
+    "category": "Mobile Development",
+    "estimatedTime": "37 hours",
+    "prerequisites": ["Object-Oriented Programming concepts"]
+  }
+]
