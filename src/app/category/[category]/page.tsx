@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { Tutorial } from '@/lib/types';
 import Link from 'next/link';
@@ -15,8 +15,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Clock, BarChart3, Code, ArrowLeft, Bookmark, CheckCircle } from 'lucide-react';
+import { Clock, BarChart3, Code, ArrowLeft, Bookmark, CheckCircle, FilterX } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Label } from '@/components/ui/label';
 
 
 export default function CategoryPage() {
@@ -27,6 +30,10 @@ export default function CategoryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [savedTutorials, setSavedTutorials] = useState<Set<string>>(new Set());
+
+  // State for sorting and filtering
+  const [sortOption, setSortOption] = useState('title-asc');
+  const [filters, setFilters] = useState({ difficulty: 'all', language: 'all' });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -76,6 +83,47 @@ export default function CategoryPage() {
     localStorage.setItem('savedTutorials', JSON.stringify(Array.from(newSavedTutorials)));
   };
 
+  const clearFilters = () => {
+    setFilters({ difficulty: 'all', language: 'all' });
+  };
+  
+  const availableLanguages = useMemo(() => {
+    const languages = new Set(tutorials.map(t => t.language));
+    return Array.from(languages).sort();
+  }, [tutorials]);
+
+  const filteredAndSortedTutorials = useMemo(() => {
+    let result = [...tutorials];
+
+    // Filtering
+    if (filters.difficulty !== 'all') {
+        result = result.filter(t => t.difficulty === filters.difficulty);
+    }
+    if (filters.language !== 'all') {
+        result = result.filter(t => t.language === filters.language);
+    }
+
+    // Sorting
+    switch (sortOption) {
+        case 'title-asc':
+            result.sort((a, b) => a.title.localeCompare(b.title));
+            break;
+        case 'title-desc':
+            result.sort((a, b) => b.title.localeCompare(a.title));
+            break;
+        case 'difficulty-asc':
+            const diffOrder = { 'Beginner': 1, 'Intermediate': 2, 'Advanced': 3 };
+            result.sort((a, b) => diffOrder[a.difficulty] - diffOrder[b.difficulty]);
+            break;
+        case 'difficulty-desc':
+            const diffOrderDesc = { 'Beginner': 1, 'Intermediate': 2, 'Advanced': 3 };
+            result.sort((a, b) => diffOrderDesc[b.difficulty] - diffOrderDesc[a.difficulty]);
+            break;
+    }
+
+    return result;
+  }, [tutorials, sortOption, filters]);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Link href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
@@ -90,6 +138,58 @@ export default function CategoryPage() {
           Browse our curated list of high-quality {category.toLowerCase()} YouTube tutorials.
         </p>
       </header>
+      
+      <div className="bg-card border rounded-lg p-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+            <div className="grid gap-1.5">
+                <Label htmlFor="sort">Sort by</Label>
+                <Select value={sortOption} onValueChange={setSortOption}>
+                    <SelectTrigger id="sort">
+                        <SelectValue placeholder="Sort by..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="title-asc">Title (A-Z)</SelectItem>
+                        <SelectItem value="title-desc">Title (Z-A)</SelectItem>
+                        <SelectItem value="difficulty-asc">Difficulty (Easy to Hard)</SelectItem>
+                        <SelectItem value="difficulty-desc">Difficulty (Hard to Easy)</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className="grid gap-1.5">
+                <Label htmlFor="filter-difficulty">Difficulty</Label>
+                <Select value={filters.difficulty} onValueChange={(value) => setFilters(f => ({...f, difficulty: value}))}>
+                    <SelectTrigger id="filter-difficulty">
+                        <SelectValue placeholder="Filter by difficulty" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All Levels</SelectItem>
+                        <SelectItem value="Beginner">Beginner</SelectItem>
+                        <SelectItem value="Intermediate">Intermediate</SelectItem>
+                        <SelectItem value="Advanced">Advanced</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+             <div className="grid gap-1.5">
+                <Label htmlFor="filter-language">Language</Label>
+                <Select value={filters.language} onValueChange={(value) => setFilters(f => ({...f, language: value}))}>
+                    <SelectTrigger id="filter-language">
+                        <SelectValue placeholder="Filter by language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All Languages</SelectItem>
+                        {availableLanguages.map(lang => (
+                            <SelectItem key={lang} value={lang}>{lang}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+            <Button variant="ghost" onClick={clearFilters} className="w-full md:w-auto">
+                <FilterX className="mr-2 h-4 w-4"/>
+                Clear Filters
+            </Button>
+        </div>
+      </div>
+
 
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -111,9 +211,9 @@ export default function CategoryPage() {
         </div>
       ) : error ? (
         <div className="text-center text-destructive">{error}</div>
-      ) : tutorials.length > 0 ? (
+      ) : filteredAndSortedTutorials.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {tutorials.map((tutorial) => {
+          {filteredAndSortedTutorials.map((tutorial) => {
             const isSaved = savedTutorials.has(tutorial.id);
             return (
             <Card key={tutorial.id} className="flex flex-col transition-transform transform hover:-translate-y-1 shadow-md hover:shadow-xl">
@@ -158,8 +258,8 @@ export default function CategoryPage() {
         </div>
       ) : (
         <div className="text-center py-16 text-muted-foreground">
-          <p className="text-lg font-medium">No tutorials found for this category.</p>
-          <p>We couldn't find any tutorials for "{category}" at the moment.</p>
+          <p className="text-lg font-medium">No tutorials found for the selected filters.</p>
+          <p>Try adjusting your filter criteria.</p>
         </div>
       )}
     </div>
