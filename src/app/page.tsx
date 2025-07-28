@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare, LayoutGrid, PlayCircle, Bookmark } from 'lucide-react';
+import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare, LayoutGrid, PlayCircle, Bookmark, CheckCircle } from 'lucide-react';
 
 const categories = [
   {
@@ -126,7 +126,51 @@ export default function LandingPage() {
           </div>
         </section>
         
-        <section className="w-full py-16 md:py-24">
+        <section id="why-us" className="w-full py-16 md:py-24">
+          <div className="container px-4 md:px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl font-headline">
+                Why CodeClips?
+              </h2>
+               <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
+                We focus on providing the best experience for developers to learn and grow their skills.
+              </p>
+            </div>
+            <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+              <div className="flex items-start gap-4">
+                  <CheckCircle className="w-7 h-7 text-primary mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-lg font-semibold font-headline">Curated Tutorials Only</h3>
+                    <p className="text-muted-foreground mt-1">We hand-pick the best project-based tutorials to ensure quality and relevance.</p>
+                  </div>
+              </div>
+               <div className="flex items-start gap-4">
+                  <CheckCircle className="w-7 h-7 text-primary mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-lg font-semibold font-headline">Skill-based Filtering</h3>
+                    <p className="text-muted-foreground mt-1">Find tutorials that match your skill level and programming language.</p>
+                  </div>
+              </div>
+               <div className="flex items-start gap-4">
+                  <CheckCircle className="w-7 h-7 text-primary mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-lg font-semibold font-headline">Save and Track Progress</h3>
+                    <p className="text-muted-foreground mt-1">Keep a list of tutorials you want to watch and track what you've completed.</p>
+                  </div>
+              </div>
+              <div className="flex items-start gap-4">
+                  <CheckCircle className="w-7 h-7 text-primary mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-lg font-semibold font-headline">Always Free</h3>
+                    <p className="text-muted-foreground mt-1">Our platform and all tutorials are completely free for everyone.</p>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <section className="w-full py-16 md:py-24 bg-card">
           <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight font-headline">
@@ -190,3 +234,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
