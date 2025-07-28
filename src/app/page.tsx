@@ -47,7 +47,7 @@ export default function LandingPage() {
             </div>
             <div className="mt-8">
               <Button asChild size="lg">
-                <Link href="#categories">
+                <Link href="/signup">
                   Get Started
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
