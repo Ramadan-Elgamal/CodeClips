@@ -2,7 +2,10 @@
 export interface Tutorial {
   id: string;
   title: string;
-  youtubeId: string;
+  youtubeId?: string;
+  playlistId?: string;
+  articleUrl?: string;
+  type: 'video' | 'playlist' | 'article';
   summary: string;
   tags: string[];
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';

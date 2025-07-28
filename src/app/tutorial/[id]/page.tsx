@@ -8,8 +8,60 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { Bookmark, Clock, BarChart3, Code, CheckCircle, Info, ArrowLeft, Layers, ListVideo } from 'lucide-react';
+import { Bookmark, Clock, BarChart3, Code, CheckCircle, Info, ArrowLeft, Layers, ListVideo, ExternalLink, FileText, List } from 'lucide-react';
 import Link from 'next/link';
+
+function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
+  if (tutorial.type === 'video' && tutorial.youtubeId) {
+    return (
+      <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg">
+        <iframe
+          className="w-full h-full"
+          src={`https://www.youtube.com/embed/${tutorial.youtubeId}?autoplay=1`}
+          title={tutorial.title}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+    );
+  }
+  if (tutorial.type === 'playlist' && tutorial.playlistId) {
+    return (
+      <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg">
+        <iframe
+          className="w-full h-full"
+          src={`https://www.youtube.com/embed/videoseries?list=${tutorial.playlistId}`}
+          title={tutorial.title}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+    );
+  }
+  if (tutorial.type === 'article' && tutorial.articleUrl) {
+    return (
+        <div className="bg-card p-8 rounded-lg border shadow-lg mb-8 text-center">
+            <FileText className="h-16 w-16 mx-auto text-primary mb-4" />
+            <h2 className="text-2xl font-headline font-semibold mb-2">This is an Article</h2>
+            <p className="text-muted-foreground mb-6">This content is best viewed on its original page.</p>
+            <Button asChild>
+                <a href={tutorial.articleUrl} target="_blank" rel="noopener noreferrer">
+                    Read Article
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+            </Button>
+      </div>
+    );
+  }
+  return (
+    <div className="aspect-video w-full mb-8 rounded-lg bg-muted flex items-center justify-center">
+        <p className="text-muted-foreground">Content not available.</p>
+    </div>
+  );
+}
+
 
 export default function TutorialDetailPage() {
   const params = useParams();
@@ -105,6 +157,8 @@ export default function TutorialDetailPage() {
   if (!tutorial) {
       return null;
   }
+  
+  const TutorialIcon = tutorial.type === 'playlist' ? List : tutorial.type === 'article' ? FileText : ListVideo;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
@@ -113,19 +167,13 @@ export default function TutorialDetailPage() {
         Back to {tutorial.category}
       </Link>
       <header className="mb-6">
-        <h1 className="text-4xl font-bold font-headline tracking-tight mb-2">{tutorial.title}</h1>
+        <div className="flex items-center gap-4 mb-2">
+            <TutorialIcon className="h-8 w-8 text-primary" />
+            <h1 className="text-4xl font-bold font-headline tracking-tight">{tutorial.title}</h1>
+        </div>
       </header>
 
-      <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg">
-        <iframe
-          className="w-full h-full"
-          src={`https://www.youtube.com/embed/${tutorial.youtubeId}?autoplay=1`}
-          title={tutorial.title}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
+      <TutorialContent tutorial={tutorial} />
 
       <div className="grid md:grid-cols-3 gap-x-12 gap-y-8">
         <div className="md:col-span-2">
@@ -147,7 +195,7 @@ export default function TutorialDetailPage() {
             </div>
         </div>
 
-        {tutorial.timestamps && tutorial.timestamps.length > 0 && (
+        {tutorial.timestamps && tutorial.timestamps.length > 0 && tutorial.type !== 'article' && (
           <div className="md:col-span-2">
             <h2 className="text-2xl font-headline font-semibold border-b pb-2 mb-4 flex items-center gap-2">
               <ListVideo className="h-6 w-6" />

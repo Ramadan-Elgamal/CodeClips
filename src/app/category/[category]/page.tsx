@@ -15,12 +15,54 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Clock, BarChart3, Code, ArrowLeft, Bookmark, CheckCircle, FilterX, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Clock, BarChart3, Code, ArrowLeft, Bookmark, CheckCircle, FilterX, ChevronLeft, ChevronRight, ListVideo, List, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 
 const TUTORIALS_PER_PAGE = 6;
+
+function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
+    if (tutorial.type === 'video' && tutorial.youtubeId) {
+        return (
+            <iframe
+                className="w-full h-full"
+                src={`https://www.youtube.com/embed/${tutorial.youtubeId}`}
+                title={tutorial.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+            ></iframe>
+        )
+    }
+    if (tutorial.type === 'playlist' && tutorial.playlistId) {
+        return (
+            <iframe
+                className="w-full h-full"
+                src={`https://www.youtube.com/embed/videoseries?list=${tutorial.playlistId}`}
+                title={tutorial.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+            ></iframe>
+        )
+    }
+    if (tutorial.type === 'article') {
+        return (
+            <div className="w-full h-full bg-secondary flex flex-col items-center justify-center p-4">
+                <FileText className="h-12 w-12 text-muted-foreground mb-2"/>
+                <span className="text-sm text-muted-foreground">Article</span>
+            </div>
+        )
+    }
+    return (
+        <div className="w-full h-full bg-secondary flex flex-col items-center justify-center p-4">
+            <span className="text-sm text-muted-foreground">Content</span>
+        </div>
+    )
+}
 
 export default function CategoryPage() {
   const params = useParams();
@@ -230,24 +272,23 @@ export default function CategoryPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {paginatedTutorials.map((tutorial) => {
               const isSaved = savedTutorials.has(tutorial.id);
+              const TypeIcon = tutorial.type === 'playlist' ? List : tutorial.type === 'article' ? FileText : ListVideo;
               return (
               <Card key={tutorial.id} className="flex flex-col transition-transform transform hover:-translate-y-1 shadow-md hover:shadow-xl">
                 <CardHeader>
-                  <Link href={`/tutorial/${tutorial.id}`} className="block">
-                    <CardTitle className="font-headline text-xl leading-tight hover:text-primary transition-colors">{tutorial.title}</CardTitle>
-                  </Link>
+                    <div className="flex justify-between items-start">
+                        <Link href={`/tutorial/${tutorial.id}`} className="block pr-4">
+                            <CardTitle className="font-headline text-xl leading-tight hover:text-primary transition-colors">{tutorial.title}</CardTitle>
+                        </Link>
+                        <div className="flex flex-col items-center">
+                            <TypeIcon className="h-6 w-6 text-muted-foreground" />
+                            <span className="text-xs text-muted-foreground capitalize">{tutorial.type}</span>
+                        </div>
+                   </div>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <div className="aspect-video mb-4 rounded-md overflow-hidden">
-                    <iframe
-                      className="w-full h-full"
-                      src={`https://www.youtube.com/embed/${tutorial.youtubeId}`}
-                      title={tutorial.title}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      loading="lazy"
-                    ></iframe>
+                    <TutorialContent tutorial={tutorial} />
                   </div>
                   <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{tutorial.summary}</p>
                   <div className="space-y-2 text-sm">
