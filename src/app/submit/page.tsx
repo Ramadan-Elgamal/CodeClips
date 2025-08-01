@@ -26,7 +26,6 @@ const submitTutorialSchema = z.object({
   difficulty: z.string().min(1, "Please select a difficulty level."),
   tools: z.string().optional(),
   duration: z.string().min(1, "Please select an estimated duration."),
-  prerequisites: z.string().optional(),
   tags: z.string().optional(),
   contributorName: z.string().optional(),
   contributorEmail: z.string().email('Please enter a valid email.').optional().or(z.literal('')),
@@ -139,7 +138,7 @@ export default function SubmitTutorialPage() {
                             name="difficulty"
                             control={control}
                             render={({ field }) => (
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <Select onValuechange={field.onChange} defaultValue={field.value}>
                                     <SelectTrigger id="difficulty"><SelectValue placeholder="Select difficulty..." /></SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="Beginner">Beginner</SelectItem>
@@ -181,11 +180,6 @@ export default function SubmitTutorialPage() {
                 <div className="space-y-2">
                   <Label htmlFor="tags">Tags (comma-separated)</Label>
                   <Input id="tags" placeholder="e.g., react, crud, api, authentication" {...register('tags')} />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="prerequisites">Prerequisites (Optional)</Label>
-                  <Textarea id="prerequisites" placeholder="List any skills or knowledge needed to follow the tutorial." {...register('prerequisites')} />
                 </div>
 
                 <div className="space-y-2">
