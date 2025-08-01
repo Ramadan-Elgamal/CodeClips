@@ -20,7 +20,7 @@ import { Clock, BarChart3, Code, ArrowLeft, Bookmark, CheckCircle, FilterX, Chev
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { categories } from '@/lib/data';
+import { getTutorialsByCategory } from '@/lib/tutorials';
 
 const TUTORIALS_PER_PAGE = 6;
 
@@ -77,30 +77,24 @@ export default function CategoryPage() {
   useEffect(() => {
     if (!categoryName) return;
 
-    const categoryInfo = categories.find(c => c.name === categoryName);
-    if (!categoryInfo) {
-      setError('Category not found.');
-      setIsLoading(false);
-      return;
-    }
-
     const fetchTutorials = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`/data/${categoryInfo.path}.json`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch tutorials for this category.');
-        }
-        const data: Tutorial[] = await response.json();
+        const data = await getTutorialsByCategory(categoryName);
         setTutorials(data);
       } catch (err: any) {
         setError(err.message);
+        toast({
+          title: "Error",
+          description: "Could not fetch tutorials from Notion. Make sure your API key and Database ID are set correctly.",
+          variant: "destructive",
+        })
       } finally {
         setIsLoading(false);
       }
     };
     fetchTutorials();
-  }, [categoryName]);
+  }, [categoryName, toast]);
 
   const toggleSave = (tutorial: Tutorial) => {
     const newSavedTutorials = new Set(savedTutorials);
@@ -333,8 +327,8 @@ export default function CategoryPage() {
         </>
       ) : (
         <div className="text-center py-16 text-muted-foreground">
-          <p className="text-lg font-medium">No tutorials found for the selected filters.</p>
-          <p>Try adjusting your filter criteria.</p>
+          <p className="text-lg font-medium">No tutorials found for this category.</p>
+          <p>This could be because no tutorials are published in this category yet, or there was an issue fetching them.</p>
         </div>
       )}
     </div>

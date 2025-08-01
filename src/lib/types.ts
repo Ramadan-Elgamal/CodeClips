@@ -11,5 +11,4 @@ export interface Tutorial {
   language: string;
   category: string;
   estimatedTime: string;
-  timestamps?: { time: string; description: string }[];
 }
