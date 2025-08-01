@@ -10,86 +10,30 @@ import { Bookmark, Clock, BarChart3, Code, CheckCircle, Info, Layers, ListVideo,
 import Link from 'next/link';
 import Image from 'next/image';
 
-function getYouTubeId(url: string): string | null {
-    if (!url) return null;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-}
-
-function getPlaylistId(url: string): string | null {
-    if (!url) return null;
-    const regExp = /[?&]list=([^#&?]+)/;
-    const match = url.match(regExp);
-    return match ? match[1] : null;
-}
-
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
-  const videoId = tutorial.type === 'video' ? getYouTubeId(tutorial.url) : null;
-  const playlistId = tutorial.type === 'playlist' ? getPlaylistId(tutorial.url) : null;
-
-  if (tutorial.type === 'video' && videoId) {
-    return (
-      <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg">
-        <iframe
-          className="w-full h-full"
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-          title={tutorial.title}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
-    );
-  }
-  if (tutorial.type === 'playlist' && playlistId) {
-    return (
-      <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg">
-        <iframe
-          className="w-full h-full"
-          src={`https://www.youtube.com/embed/videoseries?list=${playlistId}`}
-          title={tutorial.title}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
-    );
-  }
-   if (tutorial.type === 'article') {
-    return (
-        <div className="bg-card p-8 rounded-lg border shadow-lg mb-8 text-center">
-            <FileText className="h-16 w-16 mx-auto text-primary mb-4" />
-            <h2 className="text-2xl font-headline font-semibold mb-2">This is an Article</h2>
-            <p className="text-muted-foreground mb-6">This content is best viewed on its original page.</p>
-            <Button asChild>
-                <a href={tutorial.url} target="_blank" rel="noopener noreferrer">
-                    Read Article
-                    <ExternalLink className="ml-2 h-4 w-4" />
-                </a>
-            </Button>
-      </div>
-    );
-  }
-  
   const imageUrl = tutorial.imageUrl || `https://placehold.co/1280x720.png`;
 
   return (
-      <div className="aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg relative">
-          <Image
-              src={imageUrl}
-              alt={tutorial.title}
-              fill
-              objectFit="cover"
-              data-ai-hint="article hero image"
-          />
-           <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-              <a href={tutorial.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-white text-lg bg-black/50 px-4 py-2 rounded-md hover:bg-black/70 transition-colors">
-                  <ExternalLink className="h-5 w-5" />
-                  View Content
-              </a>
-          </div>
+    <a 
+      href={tutorial.url} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="block aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-lg relative group"
+    >
+      <Image
+        src={imageUrl}
+        alt={tutorial.title}
+        fill
+        className="object-cover"
+        data-ai-hint="project thumbnail"
+      />
+      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="flex items-center gap-2 text-white text-lg bg-black/60 px-4 py-2 rounded-md">
+          <ExternalLink className="h-5 w-5" />
+          View on {tutorial.type === 'article' ? 'Source' : 'YouTube'}
+        </div>
       </div>
+    </a>
   );
 }
 
