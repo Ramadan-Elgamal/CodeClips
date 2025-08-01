@@ -7,7 +7,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Bookmark, Clock, BarChart3, Code, CheckCircle, Info, Layers, ListVideo, ExternalLink, FileText, List } from 'lucide-react';
-import Link from 'next/link';
+import { useAuth } from '@/hooks/use-auth';
+import { db } from '@/lib/firebase';
+import { doc, setDoc, deleteDoc, getDoc, collection } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
@@ -40,33 +43,52 @@ function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
 
 export default function TutorialDetailClient({ tutorial }: { tutorial: Tutorial }) {
   const { toast } = useToast();
+  const { user } = useAuth();
+  const router = useRouter();
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && tutorial) {
-      const savedTutorials: string[] = JSON.parse(localStorage.getItem('savedTutorials') || '[]');
-      setIsSaved(savedTutorials.includes(tutorial.id));
-    }
-  }, [tutorial]);
+    const checkIfSaved = async () => {
+        if (user && tutorial) {
+            const tutorialRef = doc(db, `users/${user.uid}/savedTutorials/${tutorial.id}`);
+            const docSnap = await getDoc(tutorialRef);
+            setIsSaved(docSnap.exists());
+        } else {
+            setIsSaved(false);
+        }
+    };
+    checkIfSaved();
+  }, [user, tutorial]);
 
-  const toggleSave = () => {
-    if (!tutorial) return;
-    const savedTutorials: string[] = JSON.parse(localStorage.getItem('savedTutorials') || '[]');
-    let updatedSaved: string[];
-    if (isSaved) {
-      updatedSaved = savedTutorials.filter((savedId) => savedId !== tutorial.id);
-      toast({
-        title: "Removed from Saved",
-        description: `"${tutorial.title}" has been removed from your saved tutorials.`,
-      });
-    } else {
-      updatedSaved = [...savedTutorials, tutorial.id];
-      toast({
-        title: "Saved!",
-        description: `"${tutorial.title}" has been added to your saved tutorials.`,
-      });
+  const toggleSave = async () => {
+    if (!user || !tutorial) {
+        toast({
+            title: 'Please Login to Save',
+            description: 'You need to be logged in to save tutorials.',
+            variant: 'destructive'
+        });
+        router.push('/login');
+        return;
     }
-    localStorage.setItem('savedTutorials', JSON.stringify(updatedSaved));
+
+    const tutorialRef = doc(db, `users/${user.uid}/savedTutorials/${tutorial.id}`);
+
+    if (isSaved) {
+        await deleteDoc(tutorialRef);
+        toast({
+            title: "Removed from Saved",
+            description: `"${tutorial.title}" has been removed from your saved tutorials.`,
+        });
+    } else {
+        await setDoc(tutorialRef, {
+            ...tutorial,
+            savedAt: new Date()
+        });
+        toast({
+            title: "Saved!",
+            description: `"${tutorial.title}" has been added to your saved tutorials.`,
+        });
+    }
     setIsSaved(!isSaved);
   };
   

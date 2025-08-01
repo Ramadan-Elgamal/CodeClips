@@ -19,6 +19,10 @@ import { Clock, BarChart3, Code, Bookmark, CheckCircle, FilterX, ChevronLeft, Ch
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { useAuth } from '@/hooks/use-auth';
+import { db } from '@/lib/firebase';
+import { doc, setDoc, deleteDoc, getDocs, collection } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 
 const TUTORIALS_PER_PAGE = 6;
 
@@ -53,31 +57,57 @@ function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
 
 export default function CategoryTutorials({ initialTutorials }: { initialTutorials: Tutorial[] }) {
   const { toast } = useToast();
+  const { user } = useAuth();
+  const router = useRouter();
   const [tutorials, setTutorials] = useState<Tutorial[]>(initialTutorials);
-  const [isLoading, setIsLoading] = useState(false); // No longer loading initially
+  const [isLoading, setIsLoading] = useState(false);
   const [savedTutorials, setSavedTutorials] = useState<Set<string>>(new Set());
 
   // State for sorting and filtering
   const [sortOption, setSortOption] = useState('title-asc');
   const [filters, setFilters] = useState({ difficulty: 'all', language: 'all' });
   const [currentPage, setCurrentPage] = useState(1);
-
+  
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedIds = JSON.parse(localStorage.getItem('savedTutorials') || '[]');
-      setSavedTutorials(new Set(savedIds));
-    }
-  }, []);
+    const fetchSavedTutorials = async () => {
+        if (user) {
+            const savedTutorialsRef = collection(db, `users/${user.uid}/savedTutorials`);
+            const querySnapshot = await getDocs(savedTutorialsRef);
+            const savedIds = new Set(querySnapshot.docs.map(doc => doc.id));
+            setSavedTutorials(savedIds);
+        } else {
+            setSavedTutorials(new Set());
+        }
+    };
+    fetchSavedTutorials();
+  }, [user]);
 
-  const toggleSave = (tutorial: Tutorial) => {
+  const toggleSave = async (tutorial: Tutorial) => {
+    if (!user) {
+        toast({
+            title: 'Please Login to Save',
+            description: 'You need to be logged in to save tutorials.',
+            variant: 'destructive'
+        });
+        router.push('/login');
+        return;
+    }
+
     const newSavedTutorials = new Set(savedTutorials);
+    const tutorialRef = doc(db, `users/${user.uid}/savedTutorials/${tutorial.id}`);
+
     if (newSavedTutorials.has(tutorial.id)) {
+      await deleteDoc(tutorialRef);
       newSavedTutorials.delete(tutorial.id);
       toast({
         title: 'Removed from Saved',
         description: `"${tutorial.title}" has been removed from your saved tutorials.`,
       });
     } else {
+      await setDoc(tutorialRef, {
+        ...tutorial,
+        savedAt: new Date()
+      });
       newSavedTutorials.add(tutorial.id);
       toast({
         title: 'Saved!',
@@ -85,7 +115,6 @@ export default function CategoryTutorials({ initialTutorials }: { initialTutoria
       });
     }
     setSavedTutorials(newSavedTutorials);
-    localStorage.setItem('savedTutorials', JSON.stringify(Array.from(newSavedTutorials)));
   };
 
   const clearFilters = () => {
