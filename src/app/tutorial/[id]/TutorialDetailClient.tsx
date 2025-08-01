@@ -86,13 +86,26 @@ export default function TutorialDetailClient({ tutorial }: { tutorial: Tutorial 
 
       <TutorialContent tutorial={tutorial} />
 
-      <div className="grid md:grid-cols-3 gap-x-12 gap-y-8">
-        <div className="md:col-span-2">
-          <h2 className="text-2xl font-headline font-semibold border-b pb-2 mb-4">About this tutorial</h2>
-          <p className="text-foreground/80 leading-relaxed">{tutorial.summary}</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-8">
+        <div className="md:col-span-2 space-y-8">
+            <div>
+                <h2 className="text-2xl font-headline font-semibold border-b pb-2 mb-4">About this tutorial</h2>
+                <p className="text-foreground/80 leading-relaxed">{tutorial.summary}</p>
+            </div>
+             {tutorial.tags.length > 0 && (
+                <div>
+                    <h2 className="text-2xl font-headline font-semibold border-b pb-2 mb-4 flex items-center gap-2">
+                    <Layers className="h-6 w-6" />
+                    Stack Used
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                        {tutorial.tags.map(tag => <Badge key={tag} variant="secondary" className="text-sm py-1 px-3">{tag}</Badge>)}
+                    </div>
+                </div>
+            )}
         </div>
-        <div className="row-start-3 md:row-auto">
-            <div className="bg-card p-6 rounded-lg border">
+        <div className="md:col-span-1">
+            <div className="bg-card p-6 rounded-lg border sticky top-24">
                 <h3 className="text-lg font-headline font-semibold mb-4">Details</h3>
                 <ul className="space-y-3 text-sm">
                     <li className="flex items-center gap-3"><BarChart3 className="h-5 w-5 text-accent flex-shrink-0" /> <span><strong>Difficulty:</strong> {tutorial.difficulty}</span></li>
@@ -105,18 +118,6 @@ export default function TutorialDetailClient({ tutorial }: { tutorial: Tutorial 
                 </Button>
             </div>
         </div>
-        
-        {tutorial.tags.length > 0 && (
-            <div className="md:col-span-2">
-                <h2 className="text-2xl font-headline font-semibold border-b pb-2 mb-4 flex items-center gap-2">
-                  <Layers className="h-6 w-6" />
-                  Stack Used
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                    {tutorial.tags.map(tag => <Badge key={tag} variant="secondary" className="text-sm py-1 px-3">{tag}</Badge>)}
-                </div>
-            </div>
-        )}
       </div>
     </>
   );
