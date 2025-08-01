@@ -226,12 +226,12 @@ export default function SavedPage() {
                     </SelectContent>
                 </Select>
               </CardContent>
-              <CardFooter className="flex justify-between gap-2">
-                <Button variant="outline" size="sm" onClick={() => updateStatus(tutorial.id, 'completed')} disabled={tutorial.status === 'completed'}>
+              <CardFooter className="flex-col sm:flex-row justify-between gap-2">
+                <Button className="w-full sm:w-auto" variant="outline" size="sm" onClick={() => updateStatus(tutorial.id, 'completed')}>
                   <CheckCircle className="mr-2 h-4 w-4" />
                   Mark as Completed
                 </Button>
-                <Button variant="destructive" size="sm" onClick={() => removeTutorial(tutorial.id, tutorial.title)}>
+                <Button className="w-full sm:w-auto" variant="destructive" size="sm" onClick={() => removeTutorial(tutorial.id, tutorial.title)}>
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete
                 </Button>
