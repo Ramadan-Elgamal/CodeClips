@@ -16,7 +16,7 @@ export interface Tutorial {
 
 export interface Submission {
   id: string;
-  url: string;
+  url:string;
   title: string;
   summary: string;
   whatYoullLearn?: string;
@@ -30,4 +30,5 @@ export interface Submission {
   contributorEmail?: string;
   submittedBy: string;
   status: 'pending' | 'approved' | 'rejected';
+  submittedAt: string; // Changed to string to ensure serializability from server to client
 }
