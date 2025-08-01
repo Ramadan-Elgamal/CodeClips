@@ -1,3 +1,4 @@
+
 import { Client } from '@notionhq/client';
 import { Tutorial } from './types';
 
@@ -10,13 +11,48 @@ if (!notionApiKey) {
 
 const notion = new Client({ auth: notionApiKey });
 
+function getYouTubeVideoId(url: string): string | null {
+    try {
+        const urlObj = new URL(url);
+        if (urlObj.hostname === 'youtu.be') {
+            return urlObj.pathname.slice(1);
+        }
+        if (urlObj.hostname.includes('youtube.com')) {
+            return urlObj.searchParams.get('v');
+        }
+    } catch (error) {
+        // Was not a valid URL
+    }
+    return null;
+}
+
 function mapNotionResultToTutorial(result: any): Tutorial {
     const { properties } = result;
+
+    let imageUrl = properties.ImageURL?.url ?? undefined;
+    const videoUrl = properties.URL?.url ?? '';
+    
+    // If no image is provided, try to generate one from the YouTube URL
+    if (!imageUrl && videoUrl) {
+        const videoId = getYouTubeVideoId(videoUrl);
+        if (videoId) {
+            // Use high-quality thumbnail
+            imageUrl = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+        }
+    } else if (imageUrl && imageUrl.includes('ytimg.com')) {
+        // If an image URL is provided and it's from YouTube, upgrade its quality.
+        // This replaces things like `default.jpg` or `hqdefault.jpg` with the best version.
+        const videoId = imageUrl.split('/')[4];
+        if (videoId) {
+             imageUrl = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+        }
+    }
+
     return {
         id: result.id,
         title: properties.Title?.title?.[0]?.plain_text ?? 'Untitled',
         url: properties.URL?.url ?? '',
-        imageUrl: properties.ImageURL?.url ?? undefined,
+        imageUrl: imageUrl,
         type: properties.Type?.select?.name ?? 'article',
         summary: properties.Summary?.rich_text?.[0]?.plain_text ?? '',
         tags: properties.Tags?.multi_select?.map((tag: any) => tag.name) ?? [],
