@@ -193,7 +193,6 @@ function SavedTutorialsClient({ allTutorials }: { allTutorials: Tutorial[] }) {
   )
 }
 
-
 export default async function SavedPage() {
   const allTutorials = await getAllTutorials();
 
