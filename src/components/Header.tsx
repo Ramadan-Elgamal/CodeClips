@@ -2,13 +2,17 @@
 'use client';
 
 import Link from 'next/link';
-import { PlaySquare, Bookmark, Menu, Search } from 'lucide-react';
+import { PlaySquare, Bookmark, Menu, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { SidebarTrigger } from './ui/sidebar';
+import { useAuth } from '@/hooks/use-auth';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 
 
 export function Header() {
+  const { user, loading, logout } = useAuth();
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center max-w-screen-2xl">
@@ -27,18 +31,51 @@ export function Header() {
 
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <nav className="hidden items-center space-x-2 md:flex">
-              <Button variant="ghost" asChild>
-                <Link href="/saved">
-                  <Bookmark className="mr-2 h-4 w-4" />
-                  Saved
-                </Link>
-              </Button>
-              <Button variant="ghost" asChild>
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/signup">Sign Up</Link>
-              </Button>
+              {user && (
+                 <Button variant="ghost" asChild>
+                    <Link href="/saved">
+                    <Bookmark className="mr-2 h-4 w-4" />
+                    Saved
+                    </Link>
+                </Button>
+              )}
+             
+              {!loading && !user && (
+                <>
+                    <Button variant="ghost" asChild>
+                        <Link href="/login">Login</Link>
+                    </Button>
+                    <Button asChild>
+                        <Link href="/signup">Sign Up</Link>
+                    </Button>
+                </>
+              )}
+               {user && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                       <Avatar className="h-9 w-9">
+                          <AvatarImage src={user.photoURL ?? undefined} alt={user.displayName ?? ""} />
+                          <AvatarFallback>{user.displayName?.[0] ?? user.email?.[0]}</AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{user.displayName}</p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                          {user.email}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={logout}>
+                      Log out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </nav>
         </div>
       </div>

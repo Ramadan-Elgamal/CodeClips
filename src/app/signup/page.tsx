@@ -13,23 +13,30 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const { signup } = useAuth();
+    const router = useRouter();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        // Basic validation
         if (!name || !email || !password) {
             setError('Please fill in all fields.');
             return;
         }
-        console.log('Signing up with:', { name, email, password });
-        // Here you would typically handle the signup logic, e.g., call an API
+        try {
+            await signup(email, password, name);
+            router.push('/');
+        } catch (err: any) {
+             setError(err.message);
+        }
     };
 
   return (

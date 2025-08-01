@@ -13,22 +13,29 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const { login } = useAuth();
+    const router = useRouter();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        // Basic validation
         if (!email || !password) {
             setError('Please fill in all fields.');
             return;
         }
-        console.log('Logging in with:', { email, password });
-        // Here you would typically handle the login logic, e.g., call an API
+        try {
+            await login(email, password);
+            router.push('/');
+        } catch (err: any) {
+            setError(err.message);
+        }
     };
 
   return (
