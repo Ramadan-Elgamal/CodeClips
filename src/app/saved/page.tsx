@@ -50,7 +50,7 @@ function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
     )
 }
 
-export default function SavedPage() {
+function SavedTutorialsClient({ allTutorials }: { allTutorials: Tutorial[] }) {
   const [savedTutorials, setSavedTutorials] = useState<Tutorial[]>([]);
   const [statuses, setStatuses] = useState<Record<string, TutorialStatus>>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -69,14 +69,12 @@ export default function SavedPage() {
         setIsLoading(false);
         return;
       }
-
-      getAllTutorials().then((allTutorials) => {
-        const filtered = allTutorials.filter(t => savedIds.includes(t.id));
-        setSavedTutorials(filtered);
-        setIsLoading(false);
-      });
+      
+      const filtered = allTutorials.filter(t => savedIds.includes(t.id));
+      setSavedTutorials(filtered);
+      setIsLoading(false);
     }
-  }, []);
+  }, [allTutorials]);
 
   useEffect(() => {
     loadSavedData();
@@ -117,16 +115,7 @@ export default function SavedPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <header className="mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold font-headline tracking-tight text-center">
-          Your Saved Tutorials
-        </h1>
-        <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-center">
-          Track your learning journey. Update statuses and mark tutorials as completed.
-        </p>
-      </header>
-      
+     <>
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({length: 3}).map((_, i) => (
@@ -200,6 +189,26 @@ export default function SavedPage() {
           </Button>
         </div>
       )}
+    </>
+  )
+}
+
+
+export default async function SavedPage() {
+  const allTutorials = await getAllTutorials();
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <header className="mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold font-headline tracking-tight text-center">
+          Your Saved Tutorials
+        </h1>
+        <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-center">
+          Track your learning journey. Update statuses and mark tutorials as completed.
+        </p>
+      </header>
+      
+      <SavedTutorialsClient allTutorials={allTutorials} />
     </div>
   );
 }
