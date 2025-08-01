@@ -2,16 +2,18 @@
 'use client';
 
 import Link from 'next/link';
-import { PlaySquare, Bookmark, Menu, LogIn } from 'lucide-react';
+import { PlaySquare, Bookmark, Menu, LogIn, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from './ui/sidebar';
 import { useAuth } from '@/hooks/use-auth';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 
+const adminUid = process.env.NEXT_PUBLIC_ADMIN_UID;
 
 export function Header() {
   const { user, loading, logout } = useAuth();
+  const isAdmin = user && user.uid === adminUid;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -70,6 +72,14 @@ export function Header() {
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    {isAdmin && (
+                      <DropdownMenuItem asChild>
+                         <Link href="/admin">
+                            <ShieldCheck className="mr-2 h-4 w-4" />
+                            Admin
+                         </Link>
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem onClick={logout}>
                       Log out
                     </DropdownMenuItem>
