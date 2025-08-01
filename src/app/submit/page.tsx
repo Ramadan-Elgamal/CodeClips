@@ -12,6 +12,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckCircle, XCircle } from 'lucide-react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useAuth } from '@/hooks/use-auth';
 
 
 const youtubeUrlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
@@ -35,23 +38,41 @@ type SubmitTutorialForm = z.infer<typeof submitTutorialSchema>;
 
 export default function SubmitTutorialPage() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const { 
     register, 
     handleSubmit, 
     control,
     reset,
-    formState: { errors } 
+    formState: { errors, isSubmitting } 
   } = useForm<SubmitTutorialForm>({
     resolver: zodResolver(submitTutorialSchema),
   });
 
-  const onSubmit = (data: SubmitTutorialForm) => {
-    console.log('Form submitted:', data);
-    toast({
-      title: 'Tutorial Submitted!',
-      description: 'Thanks! We’ll review your tutorial and publish it if it meets the guidelines.',
-    });
-    reset();
+  const onSubmit = async (data: SubmitTutorialForm) => {
+    try {
+      const submissionData = {
+        ...data,
+        submittedAt: serverTimestamp(),
+        status: 'pending',
+        submittedBy: user ? user.uid : 'anonymous',
+      };
+      
+      await addDoc(collection(db, 'submissions'), submissionData);
+
+      toast({
+        title: 'Tutorial Submitted!',
+        description: 'Thanks! We’ll review your tutorial and publish it if it meets the guidelines.',
+      });
+      reset();
+    } catch (error) {
+      console.error("Error submitting tutorial: ", error);
+      toast({
+        title: 'Submission Failed',
+        description: 'Something went wrong. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -138,7 +159,7 @@ export default function SubmitTutorialPage() {
                             name="difficulty"
                             control={control}
                             render={({ field }) => (
-                                <Select onValuechange={field.onChange} defaultValue={field.value}>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <SelectTrigger id="difficulty"><SelectValue placeholder="Select difficulty..." /></SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="Beginner">Beginner</SelectItem>
@@ -160,7 +181,7 @@ export default function SubmitTutorialPage() {
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <SelectTrigger id="duration"><SelectValue placeholder="Select duration..." /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="< 30 mins">&lt; 30 mins</SelectItem>
+                                        <SelectItem value="&lt; 30 mins">&lt; 30 mins</SelectItem>
                                         <SelectItem value="30-60 mins">30-60 mins</SelectItem>
                                         <SelectItem value="1-2 hours">1-2 hours</SelectItem>
                                         <SelectItem value="2+ hours">2+ hours</SelectItem>
@@ -199,8 +220,8 @@ export default function SubmitTutorialPage() {
                     </div>
                 </div>
 
-                <Button type="submit" className="w-full text-lg py-6">
-                  Submit Tutorial
+                <Button type="submit" className="w-full text-lg py-6" disabled={isSubmitting}>
+                  {isSubmitting ? 'Submitting...' : 'Submit Tutorial'}
                 </Button>
               </form>
             </CardContent>
