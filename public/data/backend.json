@@ -1,0 +1,28 @@
+[
+    {
+        "id": "backend-1",
+        "title": "Node.js and Express.js - Full Course",
+        "url": "https://www.youtube.com/watch?v=Oe421JkE95Y",
+        "type": "video",
+        "summary": "Learn the basics of building a REST API with Node.js and Express. Covers routing, middleware, and connecting to a database.",
+        "tags": ["Node.js", "Express", "API", "JavaScript", "REST"],
+        "difficulty": "Beginner",
+        "language": "JavaScript",
+        "category": "Backend",
+        "estimatedTime": "3 hours",
+        "prerequisites": ["Basic JavaScript knowledge"]
+    },
+    {
+        "id": "backend-2",
+        "title": "Django for Everybody",
+        "url": "https://www.youtube.com/playlist?list=PLlRFEj9H3Ojv4D2QddY-G7mgxO7L6K2_B",
+        "type": "playlist",
+        "summary": "A full playlist from Dr. Chuck that teaches you how to build web applications with Python and Django, from the ground up.",
+        "tags": ["Python", "Django", "Web Development"],
+        "difficulty": "Intermediate",
+        "language": "Python",
+        "category": "Backend",
+        "estimatedTime": "10+ hours",
+        "prerequisites": ["Intermediate Python"]
+    }
+]

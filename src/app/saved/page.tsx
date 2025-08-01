@@ -17,6 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { BookmarkX, Trash2, CheckCircle, FileText } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { getAllTutorials } from '@/lib/tutorials';
 
 type TutorialStatus = 'saved' | 'in-progress' | 'completed';
 
@@ -69,12 +70,11 @@ export default function SavedPage() {
         return;
       }
 
-      fetch('/data.json')
-        .then(res => res.json())
-        .then((allTutorials: Tutorial[]) => {
-          const filtered = allTutorials.filter(t => savedIds.includes(t.id));
-          setSavedTutorials(filtered);
-        }).finally(() => setIsLoading(false));
+      getAllTutorials().then((allTutorials) => {
+        const filtered = allTutorials.filter(t => savedIds.includes(t.id));
+        setSavedTutorials(filtered);
+        setIsLoading(false);
+      });
     }
   }, []);
 

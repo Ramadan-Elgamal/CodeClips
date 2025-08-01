@@ -1,0 +1,16 @@
+[
+    {
+        "id": "ai-1",
+        "title": "Build a Neural Network from Scratch",
+        "url": "https://www.youtube.com/watch?v=o6kQ_okxmk8",
+        "imageUrl": "https://placehold.co/400x225.png",
+        "type": "video",
+        "summary": "Dive deep into the fundamentals of neural networks by building one from scratch in Python. No fancy libraries, just pure understanding.",
+        "tags": ["Python", "Neural Networks", "Machine Learning", "From Scratch"],
+        "difficulty": "Advanced",
+        "language": "Python",
+        "category": "AI/ML",
+        "estimatedTime": "4+ hours",
+        "prerequisites": ["Strong Python skills", "Calculus and Linear Algebra basics"]
+    }
+]

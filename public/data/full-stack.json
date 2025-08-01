@@ -1,0 +1,28 @@
+[
+    {
+        "id": "fullstack-1",
+        "title": "Full Stack React & Firebase Tutorial",
+        "url": "https://www.youtube.com/watch?v=m_u6P5k0vP0",
+        "type": "video",
+        "summary": "Build a complete social media application from scratch using React, Firebase for the backend, and Material-UI for styling.",
+        "tags": ["React", "Firebase", "Full Stack", "Material-UI"],
+        "difficulty": "Intermediate",
+        "language": "JavaScript",
+        "category": "Full Stack",
+        "estimatedTime": "5 hours",
+        "prerequisites": ["React basics", "JavaScript (ES6)"]
+    },
+    {
+        "id": "fullstack-2",
+        "title": "Build and Deploy a MERN App",
+        "url": "https://www.youtube.com/watch?v=a00NRSFgHsY",
+        "type": "video",
+        "summary": "A comprehensive guide to building a full-stack MERN (MongoDB, Express, React, Node.js) application, including deployment to Heroku.",
+        "tags": ["MERN", "React", "Node.js", "MongoDB", "Express"],
+        "difficulty": "Advanced",
+        "language": "JavaScript",
+        "category": "Full Stack",
+        "estimatedTime": "2.5 hours",
+        "prerequisites": ["Solid understanding of React and Node.js"]
+    }
+]

@@ -20,22 +20,9 @@ import { Clock, BarChart3, Code, ArrowLeft, Bookmark, CheckCircle, FilterX, Chev
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { categories } from '@/lib/data';
 
 const TUTORIALS_PER_PAGE = 6;
-
-function getYouTubeId(url: string): string | null {
-    if (!url) return null;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-}
-
-function getPlaylistId(url: string): string | null {
-    if (!url) return null;
-    const regExp = /[?&]list=([^#&?]+)/;
-    const match = url.match(regExp);
-    return match ? match[1] : null;
-}
 
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
     if (tutorial.type === 'video' || tutorial.type === 'playlist') {
@@ -68,7 +55,7 @@ function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
 
 export default function CategoryPage() {
   const params = useParams();
-  const category = decodeURIComponent(params.category as string);
+  const categoryName = decodeURIComponent(params.category as string);
   const { toast } = useToast();
   const [tutorials, setTutorials] = useState<Tutorial[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -88,18 +75,24 @@ export default function CategoryPage() {
   }, []);
 
   useEffect(() => {
-    if (!category) return;
+    if (!categoryName) return;
+
+    const categoryInfo = categories.find(c => c.name === categoryName);
+    if (!categoryInfo) {
+      setError('Category not found.');
+      setIsLoading(false);
+      return;
+    }
+
     const fetchTutorials = async () => {
+      setIsLoading(true);
       try {
-        const response = await fetch('/data.json');
+        const response = await fetch(`/data/${categoryInfo.path}.json`);
         if (!response.ok) {
-          throw new Error('Failed to fetch tutorials');
+          throw new Error('Failed to fetch tutorials for this category.');
         }
         const data: Tutorial[] = await response.json();
-        const filteredTutorials = data.filter(
-          (tutorial) => tutorial.category === category
-        );
-        setTutorials(filteredTutorials);
+        setTutorials(data);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -107,7 +100,7 @@ export default function CategoryPage() {
       }
     };
     fetchTutorials();
-  }, [category]);
+  }, [categoryName]);
 
   const toggleSave = (tutorial: Tutorial) => {
     const newSavedTutorials = new Set(savedTutorials);
@@ -190,10 +183,10 @@ export default function CategoryPage() {
       </Link>
       <header className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold font-headline tracking-tight">
-          {category} Tutorials
+          {categoryName} Tutorials
         </h1>
         <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-          Browse our curated list of high-quality {category.toLowerCase()} YouTube tutorials.
+          Browse our curated list of high-quality {categoryName.toLowerCase()} YouTube tutorials.
         </p>
       </header>
       

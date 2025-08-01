@@ -5,37 +5,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare, LayoutGrid, PlayCircle, Bookmark, CheckCircle, Clock, BarChart3, FileText, ListVideo, List, Coffee } from 'lucide-react';
+import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare, LayoutGrid, PlayCircle, Bookmark, CheckCircle, Clock, BarChart3, FileText, ListVideo, List, Coffee, Smartphone, Cpu } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Tutorial } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
-
-const categories = [
-  {
-    name: 'Frontend',
-    description: 'Build beautiful and interactive user interfaces.',
-    href: '/category/Frontend',
-    icon: <Code className="w-8 h-8 text-primary" />,
-  },
-  {
-    name: 'Backend',
-    description: 'Power your applications with robust server-side logic.',
-    href: '/category/Backend',
-    icon: <BrainCircuit className="w-8 h-8 text-primary" />,
-  },
-  {
-    name: 'Full Stack',
-    description: 'Master both frontend and backend development.',
-    href: '/category/Full%20Stack',
-    icon: <Code className="w-8 h-8 text-primary" />,
-  },
-  {
-    name: 'Mobile',
-    description: 'Create amazing apps for iOS and Android.',
-    href: '/category/Mobile',
-    icon: <Video className="w-8 h-8 text-primary" />,
-  },
-];
+import { categories } from '@/lib/data';
+import { getAllTutorials } from '@/lib/tutorials';
 
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
     if (tutorial.type === 'video' || tutorial.type === 'playlist') {
@@ -69,13 +44,10 @@ function FeaturedTutorials() {
     const [tutorials, setTutorials] = useState<Tutorial[]>([]);
 
     useEffect(() => {
-        fetch('/data.json')
-            .then(res => res.json())
-            .then((data: Tutorial[]) => {
-                // simple logic to feature a few tutorials
-                const featured = data.filter(t => t.tags.includes('React') || t.tags.includes('Next.js')).slice(0, 3);
-                setTutorials(featured);
-            });
+        getAllTutorials().then(allTutorials => {
+            const featured = allTutorials.filter(t => t.tags.includes('React') || t.tags.includes('Next.js')).slice(0, 3);
+            setTutorials(featured);
+        });
     }, []);
 
     if (tutorials.length === 0) return null;
@@ -207,7 +179,7 @@ export default function LandingPage() {
                 Whether you're just starting out or looking to specialize, we have a category for you.
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {categories.map((category) => (
                 <Link key={category.name} href={category.href} className="group">
                   <Card className="h-full transition-all duration-200 ease-in-out transform hover:scale-105 hover:shadow-xl">
@@ -310,7 +282,7 @@ export default function LandingPage() {
              <div>
               <h3 className="font-headline font-semibold mb-4">Navigation</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="#categories" className="text-muted-foreground hover:text-foreground">Paths</Link></li>
+                <li><Link href="/paths" className="text-muted-foreground hover:text-foreground">Paths</Link></li>
                 <li><Link href="/saved" className="text-muted-foreground hover:text-foreground">Saved Tutorials</Link></li>
                  <li><Link href="/about" className="text-muted-foreground hover:text-foreground">About</Link></li>
                 <li><Link href="/contact" className="text-muted-foreground hover:text-foreground">Contact</Link></li>

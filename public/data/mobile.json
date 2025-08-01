@@ -1,0 +1,28 @@
+[
+    {
+        "id": "mobile-1",
+        "title": "Flutter Course for Beginners",
+        "url": "https://www.youtube.com/watch?v=pTJJsmejBjo",
+        "type": "video",
+        "summary": "A 37-hour comprehensive course on Flutter and Dart. Build beautiful, natively compiled applications for mobile (iOS & Android) from a single codebase.",
+        "tags": ["Flutter", "Dart", "Mobile", "iOS", "Android"],
+        "difficulty": "Beginner",
+        "language": "Dart",
+        "category": "Mobile",
+        "estimatedTime": "37 hours",
+        "prerequisites": ["Some programming experience is helpful but not required."]
+    },
+    {
+        "id": "mobile-2",
+        "title": "React Native Tutorial for Beginners",
+        "url": "https://www.youtube.com/watch?v=0-S5a0eXPoc",
+        "type": "video",
+        "summary": "Learn the basics of React Native and build your first iOS and Android apps. You'll learn about components, state, props, and styling.",
+        "tags": ["React Native", "JavaScript", "Mobile"],
+        "difficulty": "Beginner",
+        "language": "JavaScript",
+        "category": "Mobile",
+        "estimatedTime": "2 hours",
+        "prerequisites": ["Basic React knowledge"]
+    }
+]

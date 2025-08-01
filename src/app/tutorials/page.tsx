@@ -15,6 +15,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Clock, BarChart3, Code, FileText } from 'lucide-react';
+import { getAllTutorials } from '@/lib/tutorials';
 
 function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
     if (tutorial.type === 'video' || tutorial.type === 'playlist') {
@@ -56,11 +57,7 @@ export default function AllTutorialsPage() {
   useEffect(() => {
     const fetchTutorials = async () => {
       try {
-        const response = await fetch('/data.json');
-        if (!response.ok) {
-          throw new Error('Failed to fetch tutorials');
-        }
-        const data: Tutorial[] = await response.json();
+        const data = await getAllTutorials();
         setAllTutorials(data);
       } catch (err: any) {
         setError(err.message);

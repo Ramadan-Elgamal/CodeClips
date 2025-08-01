@@ -1,0 +1,41 @@
+[
+    {
+        "id": "frontend-1",
+        "title": "Build a Netflix Clone with React",
+        "url": "https://www.youtube.com/watch?v=sWb1_v-p7v8",
+        "type": "video",
+        "summary": "Create a stunning Netflix clone using React for the frontend. You'll learn how to fetch data from an API and create a dynamic user interface.",
+        "tags": ["React", "JavaScript", "API", "CSS"],
+        "difficulty": "Intermediate",
+        "language": "JavaScript",
+        "category": "Frontend",
+        "estimatedTime": "2 hours",
+        "prerequisites": ["HTML, CSS, JavaScript", "Basic React knowledge"]
+    },
+    {
+        "id": "frontend-2",
+        "title": "Build a Recipe App with Vue.js",
+        "url": "https://www.youtube.com/watch?v=Jg61mI-s_eA",
+        "type": "video",
+        "summary": "This tutorial walks you through building a complete recipe application using Vue.js, Vue Router, and Vuex for state management.",
+        "tags": ["Vue.js", "JavaScript", "Vuex", "Vue Router"],
+        "difficulty": "Intermediate",
+        "language": "JavaScript",
+        "category": "Frontend",
+        "estimatedTime": "1.5 hours",
+        "prerequisites": ["HTML, CSS, JavaScript"]
+    },
+    {
+        "id": "frontend-3",
+        "title": "SmolCSS - Simple, Modern CSS",
+        "url": "https://www.smolcss.com/",
+        "type": "article",
+        "summary": "A collection of minimal, modern CSS snippets for common web components. A great resource for learning modern CSS techniques.",
+        "tags": ["CSS", "HTML", "Frontend"],
+        "difficulty": "Beginner",
+        "language": "CSS",
+        "category": "Frontend",
+        "estimatedTime": "1 hour",
+        "prerequisites": ["Basic HTML"]
+    }
+]

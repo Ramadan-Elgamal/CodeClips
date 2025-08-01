@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Bookmark, Clock, BarChart3, Code, CheckCircle, Info, ArrowLeft, Layers, ListVideo, ExternalLink, FileText, List } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getAllTutorials } from '@/lib/tutorials';
 
 function getYouTubeId(url: string): string | null {
     if (!url) return null;
@@ -110,9 +111,7 @@ export default function TutorialDetailPage() {
     if (!id) return;
     const fetchTutorial = async () => {
       try {
-        const response = await fetch('/data.json');
-        if (!response.ok) throw new Error('Failed to load tutorial data.');
-        const tutorials: Tutorial[] = await response.json();
+        const tutorials = await getAllTutorials();
         const currentTutorial = tutorials.find((t) => t.id === id);
         if (currentTutorial) {
           setTutorial(currentTutorial);
