@@ -1,6 +1,6 @@
+import 'dotenv/config'
 import { Client } from '@notionhq/client';
 import { Tutorial } from './types';
-import 'dotenv/config'
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const databaseId = process.env.NOTION_DATABASE_ID || '';
