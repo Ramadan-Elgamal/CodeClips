@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ArrowRight, Code, Video, BrainCircuit, Github, Twitter, Youtube, PlaySquare, LayoutGrid, PlayCircle, Bookmark, CheckCircle, Clock, BarChart3, FileText, ListVideo, List, Coffee, Smartphone, Cpu } from 'lucide-react';
-import { useState, useEffect } from 'react';
 import { Tutorial } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { categories } from '@/lib/data';
@@ -40,15 +39,9 @@ function TutorialContent({ tutorial }: { tutorial: Tutorial }) {
     )
 }
 
-function FeaturedTutorials() {
-    const [tutorials, setTutorials] = useState<Tutorial[]>([]);
-
-    useEffect(() => {
-        getAllTutorials().then(allTutorials => {
-            const featured = allTutorials.filter(t => t.tags.includes('React') || t.tags.includes('Next.js')).slice(0, 3);
-            setTutorials(featured);
-        });
-    }, []);
+async function FeaturedTutorials() {
+    const allTutorials = await getAllTutorials();
+    const tutorials = allTutorials.filter(t => t.tags.includes('React') || t.tags.includes('Next.js')).slice(0, 3);
 
     if (tutorials.length === 0) return null;
 
@@ -313,3 +306,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
