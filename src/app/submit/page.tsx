@@ -20,19 +20,21 @@ import { useAuth } from '@/hooks/use-auth';
 const youtubeUrlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
 
 const submitTutorialSchema = z.object({
-  url: z.string().regex(youtubeUrlRegex, 'Please enter a valid YouTube URL.'),
+  url: z.string().url().regex(youtubeUrlRegex, 'Please enter a valid YouTube URL.'),
   title: z.string().min(5, 'Title must be at least 5 characters long.'),
   summary: z.string().min(20, 'Summary must be at least 20 characters long.'),
-  whatYoullLearn: z.string().optional(),
   language: z.string().min(1, "Please select a language."),
   category: z.string().min(1, "Please select a category."),
   difficulty: z.string().min(1, "Please select a difficulty level."),
-  tools: z.string().optional(),
   duration: z.coerce.number().min(0, "Duration must be a positive number."),
   tags: z.string().optional(),
+  // Fields not in the approval schema but useful for submission context
+  whatYoullLearn: z.string().optional(),
+  tools: z.string().optional(),
   contributorName: z.string().optional(),
   contributorEmail: z.string().email('Please enter a valid email.').optional().or(z.literal('')),
 });
+
 
 type SubmitTutorialForm = z.infer<typeof submitTutorialSchema>;
 
@@ -143,7 +145,7 @@ export default function SubmitTutorialPage() {
                                         <SelectItem value="Backend">Backend</SelectItem>
                                         <SelectItem value="Full Stack">Full Stack</SelectItem>
                                         <SelectItem value="Mobile">Mobile</SelectItem>
-                                        <SelectItem value="AI">AI/ML</SelectItem>
+                                        <SelectItem value="AI/ML">AI/ML</SelectItem>
                                     </SelectContent>
                                 </Select>
                             )}
