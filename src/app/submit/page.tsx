@@ -28,7 +28,7 @@ const submitTutorialSchema = z.object({
   category: z.string().min(1, "Please select a category."),
   difficulty: z.string().min(1, "Please select a difficulty level."),
   tools: z.string().optional(),
-  duration: z.string().min(1, "Please select an estimated duration."),
+  duration: z.coerce.number().min(0, "Duration must be a positive number."),
   tags: z.string().optional(),
   contributorName: z.string().optional(),
   contributorEmail: z.string().email('Please enter a valid email.').optional().or(z.literal('')),
@@ -173,22 +173,8 @@ export default function SubmitTutorialPage() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="duration">Estimated Duration</Label>
-                         <Controller
-                            name="duration"
-                            control={control}
-                            render={({ field }) => (
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <SelectTrigger id="duration"><SelectValue placeholder="Select duration..." /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="&lt; 30 mins">&lt; 30 mins</SelectItem>
-                                        <SelectItem value="30-60 mins">30-60 mins</SelectItem>
-                                        <SelectItem value="1-2 hours">1-2 hours</SelectItem>
-                                        <SelectItem value="2+ hours">2+ hours</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            )}
-                        />
+                        <Label htmlFor="duration">Estimated Duration (hours)</Label>
+                        <Input id="duration" type="number" placeholder="e.g., 5" {...register('duration')} />
                         {errors.duration && <p className="text-sm text-destructive">{errors.duration.message}</p>}
                     </div>
                 </div>

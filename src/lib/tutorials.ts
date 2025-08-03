@@ -51,6 +51,8 @@ function mapNotionResultToTutorial(result: any): Tutorial {
         }
     }
 
+    const hours = properties.EstimatedTime?.number ?? 0;
+
     return {
         id: result.id,
         title: properties.Title?.title?.[0]?.plain_text ?? 'Untitled',
@@ -62,7 +64,7 @@ function mapNotionResultToTutorial(result: any): Tutorial {
         difficulty: properties.Difficulty?.select?.name ?? 'Beginner',
         language: properties.Language?.select?.name ?? 'JavaScript',
         category: properties.Category?.select?.name ?? 'Frontend',
-        estimatedTime: properties.EstimatedTime?.select?.name ?? '1-2 hours',
+        estimatedTime: `${hours} ${hours === 1 ? 'hour' : 'hours'}`,
     } as Tutorial;
 }
 

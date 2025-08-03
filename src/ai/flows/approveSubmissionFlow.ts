@@ -27,7 +27,7 @@ const SubmissionSchema = z.object({
   language: z.string(),
   category: z.string(),
   difficulty: z.string(),
-  duration: z.string(),
+  duration: z.number(),
   tags: z.string().optional(),
 });
 
@@ -55,7 +55,7 @@ const approveSubmissionFlow = ai.defineFlow(
         'Language': { select: { name: submission.language } },
         'Category': { select: { name: submission.category } },
         'Difficulty': { select: { name: submission.difficulty } },
-        'EstimatedTime': { select: { name: submission.duration } },
+        'EstimatedTime': { number: submission.duration },
         'Tags': { multi_select: submission.tags ? submission.tags.split(',').map(tag => ({ name: tag.trim() })) : [] },
         'Status': { select: { name: 'Published' } },
         'Type': { select: { name: 'video' } }, // Assuming all submissions are videos for now
