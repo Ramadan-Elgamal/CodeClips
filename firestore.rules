@@ -1,26 +1,26 @@
-
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Users can only read and write to their own profile data.
-    match /users/{userId} {
-      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null;
-
-      // Users can manage their own saved tutorials.
-      match /savedTutorials/{tutorialId} {
-        allow read, write, delete: if request.auth != null && request.auth.uid == userId;
-      }
+    
+    // Allow anyone to create a submission.
+    // Reading submissions is handled by the admin-only backend.
+    match /submissions/{submissionId} {
+      allow read: if request.auth != null && request.auth.uid == '12i4F1gO4Bgx4GgK1D0G3f6g1e2';
+      allow create: if true;
+      allow update, delete: if false; // Deletion is handled by the backend flow
     }
 
-    // Any user (authenticated or not) can submit a tutorial.
-    // Only an admin (via a server-side function) can read or delete them.
-    // Client-side reads are blocked to protect submitter information.
-    match /submissions/{submissionId} {
-      allow create: if true;
-      allow read, write, delete: if false; // Deletions are handled by the admin flow on the server.
+    match /users/{userId} {
+      // A user can be created during signup
+      allow create: if request.auth.uid != null;
+      // Users can only read or update their own profile
+      allow read, update: if request.auth.uid == userId;
+
+      // Saved tutorials can only be managed by their owner
+      match /savedTutorials/{tutorialId} {
+        allow read, create, delete, update: if request.auth.uid == userId;
+      }
     }
   }
 }
