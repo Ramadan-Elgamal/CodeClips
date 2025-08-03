@@ -146,11 +146,11 @@ export default function AdminPage() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-3 text-sm">
-                               <p><strong className="font-medium">Summary:</strong> {sub.summary}</p>
-                               <p><strong className="font-medium">Category:</strong> <Badge variant="secondary">{sub.category}</Badge></p>
-                               <p><strong className="font-medium">Difficulty:</strong> <Badge variant="secondary">{sub.difficulty}</Badge></p>
-                               <p><strong className="font-medium">Language:</strong> <Badge variant="secondary">{sub.language}</Badge></p>
-                               <p><strong className="font-medium">Tags:</strong> {sub.tags}</p>
+                               <div><strong className="font-medium">Summary:</strong> {sub.summary}</div>
+                               <div className="flex items-center gap-1.5"><strong className="font-medium">Category:</strong> <Badge variant="secondary">{sub.category}</Badge></div>
+                               <div className="flex items-center gap-1.5"><strong className="font-medium">Difficulty:</strong> <Badge variant="secondary">{sub.difficulty}</Badge></div>
+                               <div className="flex items-center gap-1.5"><strong className="font-medium">Language:</strong> <Badge variant="secondary">{sub.language}</Badge></div>
+                               <div><strong className="font-medium">Tags:</strong> {sub.tags}</div>
                             </CardContent>
                             <CardFooter className="flex justify-end gap-2">
                                 <Button 
