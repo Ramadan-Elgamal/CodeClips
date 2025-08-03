@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import CategoryTutorials from './CategoryTutorials';
 
 export default async function CategoryPage({ params }: { params: { category: string }}) {
-  const categoryName = decodeURIComponent(params.category as string);
+  const categoryName = decodeURIComponent(params.category);
   const tutorials = await getTutorialsByCategory(categoryName);
 
   return (
@@ -19,7 +19,7 @@ export default async function CategoryPage({ params }: { params: { category: str
           {categoryName} Tutorials
         </h1>
         <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-          Browse our curated list of high-quality {categoryName.toLowerCase()} YouTube tutorials.
+          Browse our curated list of high-quality {categoryName.toLowerCase()} tutorials.
         </p>
       </header>
       
