@@ -29,7 +29,6 @@ const submitTutorialSchema = z.object({
   duration: z.coerce.number().min(0, "Duration must be a positive number."),
   tags: z.string().optional(),
   // Fields not in the approval schema but useful for submission context
-  whatYoullLearn: z.string().optional(),
   tools: z.string().optional(),
   contributorName: z.string().optional(),
   contributorEmail: z.string().email('Please enter a valid email.').optional().or(z.literal('')),
@@ -189,11 +188,6 @@ export default function SubmitTutorialPage() {
                 <div className="space-y-2">
                   <Label htmlFor="tags">Tags (comma-separated)</Label>
                   <Input id="tags" placeholder="e.g., react, crud, api, authentication" {...register('tags')} />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="whatYoullLearn">What You'll Learn (Optional)</Label>
-                  <Textarea id="whatYoullLearn" placeholder="List 3-5 key takeaways or skills gained from this tutorial." {...register('whatYoullLearn')} />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
