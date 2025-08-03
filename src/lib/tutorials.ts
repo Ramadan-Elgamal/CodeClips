@@ -2,11 +2,14 @@
 import { Client } from '@notionhq/client';
 import { Tutorial } from './types';
 
-const notionApiKey = process.env.NEXT_PUBLIC_NOTION_API_KEY;
-const databaseId = process.env.NEXT_PUBLIC_NOTION_DATABASE_ID || '';
+const notionApiKey = process.env.NOTION_API_KEY;
+const databaseId = process.env.NOTION_DATABASE_ID || '';
 
 if (!notionApiKey) {
-    throw new Error("NEXT_PUBLIC_NOTION_API_KEY is not set in environment variables.");
+    throw new Error("NOTION_API_KEY is not set in environment variables.");
+}
+if (!databaseId) {
+    throw new Error("NOTION_DATABASE_ID is not set in environment variables.");
 }
 
 const notion = new Client({ auth: notionApiKey });
@@ -64,10 +67,6 @@ function mapNotionResultToTutorial(result: any): Tutorial {
 }
 
 export async function getAllTutorials(): Promise<Tutorial[]> {
-    if (!databaseId) {
-        console.error("NEXT_PUBLIC_NOTION_DATABASE_ID is not set.");
-        return [];
-    }
     try {
         const response = await notion.databases.query({
             database_id: databaseId,
@@ -93,10 +92,6 @@ export async function getAllTutorials(): Promise<Tutorial[]> {
 
 
 export async function getTutorialsByCategory(category: string): Promise<Tutorial[]> {
-     if (!databaseId) {
-        console.error("NEXT_PUBLIC_NOTION_DATABASE_ID is not set.");
-        return [];
-    }
     try {
         const response = await notion.databases.query({
             database_id: databaseId,

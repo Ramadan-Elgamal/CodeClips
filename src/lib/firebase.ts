@@ -3,15 +3,21 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
+const firebaseApiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+
+if (!firebaseApiKey) {
+    throw new Error("NEXT_PUBLIC_FIREBASE_API_KEY is not set in environment variables. Please check your .env file and restart the server. You can find this key in your Firebase project settings under 'General'.");
+}
+
 const firebaseConfig = {
-  "projectId": "codeclips",
-  "appId": "1:696825099134:web:2692b1812afb6518d8f92f",
-  "storageBucket": "codeclips.firebasestorage.app",
-  "apiKey": "AIzaSyD09pgld4j2-hOjPKl6rjSY3iKHdTe5mpk",
-  "authDomain": "codeclips.firebaseapp.com",
-  "measurementId": "",
-  "messagingSenderId": "696825099134"
+  apiKey: firebaseApiKey,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
+
 
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
