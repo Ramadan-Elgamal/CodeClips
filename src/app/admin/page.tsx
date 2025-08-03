@@ -66,7 +66,20 @@ export default function AdminPage() {
     const handleApprove = async (submission: Submission) => {
         setIsProcessing(prev => ({...prev, [submission.id]: true}));
         try {
-            await approveSubmission(submission);
+            // Create a plain object with only the required fields for the server action.
+            // This prevents passing non-serializable objects like Firestore Timestamps.
+            const approvalData = {
+                id: submission.id,
+                url: submission.url,
+                title: submission.title,
+                summary: submission.summary,
+                language: submission.language,
+                category: submission.category,
+                difficulty: submission.difficulty,
+                duration: submission.duration,
+                tags: submission.tags,
+            };
+            await approveSubmission(approvalData);
             toast({
                 title: "Success!",
                 description: `Tutorial "${submission.title}" has been approved and added.`,
@@ -139,6 +152,7 @@ export default function AdminPage() {
                         <Card key={sub.id}>
                             <CardHeader>
                                 <CardTitle>{sub.title}</CardTitle>
+
                                 <CardDescription>
                                     <a href={sub.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-all">
                                         {sub.url}
