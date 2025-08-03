@@ -1,5 +1,6 @@
 
-import { BrainCircuit, Code, Cpu, Smartphone } from 'lucide-react';
+
+import { BrainCircuit, Code, Cpu, Smartphone, Layers } from 'lucide-react';
 
 export const categories = [
   {
@@ -20,7 +21,7 @@ export const categories = [
     name: 'Full Stack',
     description: 'Master both frontend and backend development.',
     href: '/category/Full%20Stack',
-    icon: <Code className="w-8 h-8 text-primary" />,
+    icon: <Layers className="w-8 h-8 text-primary" />,
     path: 'full-stack',
   },
   {
