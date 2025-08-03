@@ -28,7 +28,8 @@ const submitTutorialSchema = z.object({
   difficulty: z.string().min(1, "Please select a difficulty level."),
   duration: z.coerce.number().min(0, "Duration must be a positive number."),
   tags: z.string().optional(),
-  // Fields not in the approval schema but useful for submission context
+  imageUrl: z.string().url("Please enter a valid image URL.").optional().or(z.literal('')),
+  type: z.string().min(1, "Please select a project type."),
   tools: z.string().optional(),
   contributorName: z.string().optional(),
   contributorEmail: z.string().email('Please enter a valid email.').optional().or(z.literal('')),
@@ -152,8 +153,27 @@ export default function SubmitTutorialPage() {
                         {errors.category && <p className="text-sm text-destructive">{errors.category.message}</p>}
                     </div>
                 </div>
+                
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="type">Project Type</Label>
+                        <Controller
+                            name="type"
+                            control={control}
+                            render={({ field }) => (
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <SelectTrigger id="type"><SelectValue placeholder="Select type..." /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="video">Video</SelectItem>
+                                        <SelectItem value="playlist">Playlist</SelectItem>
+                                        <SelectItem value="article">Article</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                        {errors.type && <p className="text-sm text-destructive">{errors.type.message}</p>}
+                    </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <Label htmlFor="difficulty">Difficulty</Label>
                         <Controller
@@ -172,11 +192,18 @@ export default function SubmitTutorialPage() {
                         />
                         {errors.difficulty && <p className="text-sm text-destructive">{errors.difficulty.message}</p>}
                     </div>
+                </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <Label htmlFor="duration">Estimated Duration (hours)</Label>
                         <Input id="duration" type="number" placeholder="e.g., 5" {...register('duration')} />
                         {errors.duration && <p className="text-sm text-destructive">{errors.duration.message}</p>}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="imageUrl">Image URL (Optional)</Label>
+                      <Input id="imageUrl" placeholder="https://example.com/image.png" {...register('imageUrl')} />
+                      {errors.imageUrl && <p className="text-sm text-destructive">{errors.imageUrl.message}</p>}
                     </div>
                 </div>
                 

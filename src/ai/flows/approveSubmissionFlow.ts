@@ -29,6 +29,8 @@ const SubmissionSchema = z.object({
   difficulty: z.string(),
   duration: z.number(),
   tags: z.string().optional(),
+  imageUrl: z.string().url().optional(),
+  type: z.string(),
 });
 
 type Submission = z.infer<typeof SubmissionSchema>;
@@ -58,7 +60,8 @@ const approveSubmissionFlow = ai.defineFlow(
         'EstimatedTime': { number: submission.duration },
         'Tags': { multi_select: submission.tags ? submission.tags.split(',').map(tag => ({ name: tag.trim() })) : [] },
         'Status': { select: { name: 'Published' } },
-        'Type': { select: { name: 'video' } }, // Assuming all submissions are videos for now
+        'Type': { select: { name: submission.type } },
+        'ImageURL': submission.imageUrl ? { url: submission.imageUrl } : undefined,
       },
     });
 

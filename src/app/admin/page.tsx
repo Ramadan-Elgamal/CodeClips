@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, ShieldX, Check, X } from 'lucide-react';
 import { approveSubmission } from '@/ai/flows/approveSubmissionFlow';
 import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
 
 interface Submission {
     id: string;
@@ -67,7 +68,6 @@ export default function AdminPage() {
         setIsProcessing(prev => ({...prev, [submission.id]: true}));
         try {
             // Create a plain object with only the required fields for the server action.
-            // This prevents passing non-serializable objects like Firestore Timestamps.
             const approvalData = {
                 id: submission.id,
                 url: submission.url,
@@ -78,6 +78,8 @@ export default function AdminPage() {
                 difficulty: submission.difficulty,
                 duration: submission.duration,
                 tags: submission.tags,
+                imageUrl: submission.imageUrl,
+                type: submission.type,
             };
             await approveSubmission(approvalData);
             toast({
@@ -151,6 +153,11 @@ export default function AdminPage() {
                     {submissions.map(sub => (
                         <Card key={sub.id}>
                             <CardHeader>
+                                {sub.imageUrl && (
+                                    <div className="relative aspect-video mb-4 rounded-md overflow-hidden">
+                                        <Image src={sub.imageUrl} alt={sub.title} fill className="object-cover" />
+                                    </div>
+                                )}
                                 <CardTitle>{sub.title}</CardTitle>
 
                                 <CardDescription>
@@ -161,6 +168,7 @@ export default function AdminPage() {
                             </CardHeader>
                             <CardContent className="space-y-3 text-sm">
                                <div><strong className="font-medium">Summary:</strong> {sub.summary}</div>
+                               <div className="flex items-center gap-1.5"><strong className="font-medium">Type:</strong> <Badge variant="secondary" className="capitalize">{sub.type}</Badge></div>
                                <div className="flex items-center gap-1.5"><strong className="font-medium">Category:</strong> <Badge variant="secondary">{sub.category}</Badge></div>
                                <div className="flex items-center gap-1.5"><strong className="font-medium">Difficulty:</strong> <Badge variant="secondary">{sub.difficulty}</Badge></div>
                                <div className="flex items-center gap-1.5"><strong className="font-medium">Language:</strong> <Badge variant="secondary">{sub.language}</Badge></div>
