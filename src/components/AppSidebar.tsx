@@ -21,6 +21,7 @@ import {
     LogOut, 
     PlaySquare,
     LogIn,
+    ShieldCheck,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -32,6 +33,7 @@ export function AppSidebar() {
     const pathname = usePathname();
     const { user, loading, logout } = useAuth();
     const isActive = (path: string) => pathname === path;
+    const isAdmin = user?.uid === process.env.NEXT_PUBLIC_ADMIN_UID;
 
     return (
         <Sidebar>
@@ -90,6 +92,16 @@ export function AppSidebar() {
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
+                     {isAdmin && (
+                        <SidebarMenuItem>
+                             <SidebarMenuButton asChild isActive={isActive('/admin')}>
+                                <Link href="/admin">
+                                    <ShieldCheck />
+                                    <span>Admin</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    )}
                 </SidebarMenu>
             </SidebarContent>
 
